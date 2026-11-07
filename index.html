@@ -333,9 +333,45 @@ details[open] .qteaser{display:none}
 button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visible,.sc:focus-visible,.copy:focus-visible,.known:focus-visible,input:focus-visible,.diagram-container:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar i,.mk-bar{transition:none}}
 @media print{.side{display:none}.app{display:block}.diagram-container{overflow:visible}.diagram-container svg{min-width:0}.mk-dots,.mk-nav,.mk-ctrls{display:none}}
+@media(max-width:900px){
+  body{line-height:1.6}
+  .card .card-lab{font-size:12.5px}
+  code{font-size:14px}
+  .sec-num{font-size:13px}
+  .diagram-container{width:100%!important;max-width:100%!important;overflow-x:auto}
+  .diagram-container svg{max-width:100%!important;height:auto;min-width:0!important}
+  .diagram-container svg text{font-size:12px}
+  .teach-btn{min-height:44px}
+  .reveal-btn{min-height:44px}
+  .chip{min-width:44px;min-height:44px}
+  .session button{min-height:44px}
+  .bank-wrap{border:1px solid var(--rule);border-radius:6px;background:var(--card);margin-bottom:14px;overflow:hidden}
+  .bank-wrap>summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:14px 16px;min-height:44px;font-size:15px;font-weight:500;color:var(--ink)}
+  .bank-wrap>summary::-webkit-details-marker{display:none}
+  .bank-wrap>summary::after{content:"▸";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--accent)}
+  .bank-wrap[open]>summary::after{content:"▾"}
+  .bank-wrap>.bank-payoff{padding:0 16px 14px;font-size:13.5px;color:var(--muted);line-height:1.5;margin:0}
+  .bank-wrap .bank-body{padding:0 14px 14px}
+  .bank-wrap .bank-body #qlist,.bank-wrap .bank-body #qextra{margin:0}
+  .bank-wrap{position:relative}
+  #qlist>details.q:nth-child(3n){background:var(--paper-2)}
+  #qlist>details.q{border-left:3px solid transparent}
+  #qlist>details.q:nth-child(3n){border-left-color:var(--accent)}
+  .basics-grid .basic:nth-child(odd){border-top:3px solid var(--accent)}
+  .basics-grid .basic:nth-child(even){border-top:3px solid transparent}
+  section{border-top:1px solid var(--rule);padding-top:18px}
+  section:first-of-type{border-top:none;padding-top:0}
+  .mob-progress{display:block}
+}
+@media(max-width:900px) and (prefers-reduced-motion:reduce){.mob-progress{display:none!important}}
+.mob-progress{display:none;position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--rule)}
+.mob-progress .mob-bar{height:3px;background:var(--rule)}
+.mob-progress .mob-fill{height:100%;width:0;background:var(--accent)}
+.mob-progress .mob-lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);padding:4px 16px 6px;display:block}
 </style>
 </head>
 <body>
+<div class="mob-progress" id="mobProgress" aria-hidden="true"><div class="mob-bar"><div class="mob-fill" id="mobFill"></div></div><span class="mob-lab" id="mobLab">Trang này dài — còn khoảng 20 phút</span></div>
 <div class="app">
 
 <aside class="side">
@@ -847,13 +883,19 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <input class="search" id="qsearch" type="search" placeholder="Tìm theo từ khoá, id (G15), hoặc chủ đề…" aria-label="Tìm câu hỏi">
     <div class="filters" id="qgroups"></div>
     <div class="filters" id="qprio"></div>
-    <div id="qlist"></div>
+    <details class="bank-wrap" id="bankWrap" aria-label="147 câu hỏi phỏng vấn">
+      <summary><span>147 câu hỏi — mở ra để luyện trả lời</span><span class="bank-payoff">Mỗi câu: nói 30–60 giây + 90 giây + tình huống + câu hỏi xoáy. Mở khi bạn đã làm xong CRUD.</span></summary>
+      <div class="bank-body" id="qlist"></div>
+    </details>
 
     <h3 class="sub">Ngoài phạm vi research: 8 câu React</h3>
     <p>Research của bạn đi theo <b>Vue</b>; React chỉ xuất hiện trong đó với vai trò so sánh ("giống <code>useState</code> trong React").
       Tám câu này chưa được kiểm chứng như 147 câu trên, giữ lại vì CV của bạn ghi React
       nên người phỏng vấn vẫn có thể hỏi chéo.</p>
-    <div id="qextra"></div>
+    <details class="bank-wrap" id="qextraWrap" aria-label="8 câu React ngoài phạm vi">
+      <summary><span>8 câu React ngoài phạm vi — mở khi cần hỏi chéo</span><span class="bank-payoff">Chưa kiểm chứng như 147 câu trên; giữ lại vì CV ghi React.</span></summary>
+      <div class="bank-body" id="qextra"></div>
+    </details>
     <p>147 câu là đáp án cho câu hỏi thường gặp; sáu chuyện STAR ở mục 06 là câu chuyện thực tế đi kèm.</p>
     <p class="note">Ghi chú bảo trì: câu được sinh từ nguồn research và sinh lại khi nguồn đó thay đổi.</p>
     <p><b>Đây là nguyên văn research của bạn, không được rào lại bằng lời mới.</b> 147 câu, nhóm A–J, mỗi câu mang id gốc (A01, G15…) để đối chiếu từng câu.</p>
@@ -1050,7 +1092,10 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <h3 class="sub">Bộ câu hỏi để hỏi lại <span class="ask-cnt" id="askCount"></span></h3>
     <p>Hỏi theo thứ tự này. Mỗi câu có <em>hỏi để làm gì</em>, một câu trả lời <em>tốt</em> trông thế nào,
       và một câu trả lời phải <em>cảnh giác</em>. Không cần hỏi hết — chọn 8–10 câu, ưu tiên nhóm 1 và nhóm 5.</p>
-    <div class="ask-groups" id="askGroups"></div>
+    <details class="bank-wrap" id="askWrap" aria-label="Bộ câu hỏi để hỏi lại nhà tuyển dụng">
+      <summary><span>Bộ câu hỏi để hỏi lại — mở khi sẵn sàng hỏi ngược</span><span class="bank-payoff">Chọn 8–10 câu, ưu tiên nhóm 1 (sản phẩm) và nhóm 5 (điều kiện làm việc).</span></summary>
+      <div class="bank-body" id="askGroups"></div>
+    </details>
 
     <h3 class="sub">Bảng tra nhanh: dấu hiệu phải dừng</h3>
     <table class="dec-table">
@@ -1078,11 +1123,12 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
 </main>
 </div>
 
-<script src="data.js"></script>
-<script src="bank.js"></script>
-<script src="mock.js"></script>
-<script src="ask.js"></script>
+<script src="data.js" defer></script>
+<script src="bank.js" defer></script>
+<script src="mock.js" defer></script>
+<script src="ask.js" defer></script>
 <script>
+document.addEventListener('DOMContentLoaded', function () {
 (function () {
   var P = window.PREP;
   var LSS = 'hcp-sched-v1';
@@ -1762,7 +1808,31 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
   if (window.MOCK) window.MOCK.render();
   /* due diligence (ask.js) */
   if (window.ASK) window.ASK.render();
+  /* mobile scroll progress (additive, mobile-only, respects reduced-motion) */
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced) {
+    var mp = document.getElementById('mobProgress');
+    var mf = document.getElementById('mobFill');
+    var ml = document.getElementById('mobLab');
+    if (mp && mf && ml) {
+      var onScroll = function () {
+        var doc = document.documentElement;
+        var total = doc.scrollHeight - doc.clientHeight;
+        if (total <= 0) return;
+        var y = window.scrollY || doc.scrollTop || 0;
+        var pct = Math.min(1, Math.max(0, y / total));
+        mf.style.width = (pct * 100).toFixed(1) + '%';
+        var remainPx = total - y;
+        var mins = Math.max(1, Math.round((remainPx / 844) * 1.2));
+        ml.textContent = pct >= 0.99 ? 'Đã đọc xong — trang này hết rồi' : 'Còn khoảng ' + mins + ' phút nữa';
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      onScroll();
+    }
+  }
 })();
+});
 </script>
 </body>
 </html>
