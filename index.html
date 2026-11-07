@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HiTechCloud Prep — Fullstack (AWS, Python, VueJS)</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#f5f5f5; --paper-2:#ececec; --card:#ffffff;
+  --ink:#2d3142; --muted:#4f5d75; --soft:#5a6580;
+  --accent:#bf4520; --accent-tint:rgba(191,69,32,0.08);
+  --rule:rgba(45,49,66,0.12); --rule-solid:#bfc0c0; --link:#2e5aa8;
+  --sans:'Geist',system-ui,sans-serif; --serif:'Instrument Serif',serif; --mono:'Geist Mono',ui-monospace,monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.7;font-size:16px}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);max-width:1440px;margin:0 auto}
+/* ---------- sidebar ---------- */
+.side{position:sticky;top:0;height:100vh;padding:28px 20px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:18px}
+.brand{font-family:var(--serif);font-size:20px;line-height:1.2}
+.brand span{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
+.nav{display:flex;flex-direction:column;gap:2px;overflow:auto}
+.nav a{color:var(--muted);text-decoration:none;font-size:14.5px;padding:6px 8px;border-radius:4px;border-left:2px solid transparent}
+.nav a:hover{background:var(--paper-2);color:var(--ink)}
+.nav a.active{border-left-color:var(--accent);color:var(--ink);font-weight:500}
+.nav .num{font-family:var(--mono);font-size:12px;color:var(--soft);margin-right:7px}
+.progress-wrap{margin-top:auto;border-top:1px solid var(--rule);padding-top:14px}
+.progress-wrap .lab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-bottom:7px}
+.bar{height:3px;background:var(--paper-2);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);width:0;transition:width .3s}
+/* ---------- main ---------- */
+main{padding:44px 48px 96px;min-width:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin-bottom:8px}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3vw,2.6rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:12px}
+.lead{color:var(--muted);max-width:64ch;margin-bottom:8px}
+h2{font-family:var(--serif);font-weight:400;font-size:1.6rem;letter-spacing:-.01em;margin:0 0 6px}
+h3{font-size:18px;font-weight:600;margin:26px 0 8px}
+h4{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);margin:22px 0 8px}
+section{padding:38px 0;border-top:1px solid var(--rule)}
+section:first-of-type{border-top:none;padding-top:26px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.sec-num{font-family:var(--mono);font-size:12.5px;color:var(--soft);letter-spacing:.1em}
+p{margin-bottom:12px;max-width:72ch}
+ul,ol{margin:0 0 14px 20px;max-width:72ch}
+li{margin-bottom:5px}
+code{font-family:var(--mono);font-size:.87em;background:var(--paper-2);padding:1px 5px;border-radius:3px}
+b,strong{font-weight:600}
+a{color:var(--link)}
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:15px}
+th{text-align:left;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);padding:0 12px 8px 0;border-bottom:1px solid var(--rule-solid);font-weight:500;overflow-wrap:anywhere;word-break:break-word}
+td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top;overflow-wrap:anywhere;word-break:break-word}
+td:first-child{font-weight:500}
+/* ---------- cards ---------- */
+.card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:18px 20px;margin:14px 0}
+.card.warn{border-left:3px solid var(--accent);background:var(--accent-tint)}
+.card .card-lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}.nav{flex-direction:row;flex-wrap:nowrap;overflow-x:auto}main{padding:28px 20px 64px}.grid2{grid-template-columns:1fr}}
+/* ---------- diagrams ---------- */
+figure{margin:20px 0 24px}
+.diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--paper);padding:8px 0}
+.diagram-container svg{display:block;min-width:960px;width:100%;height:auto}
+figcaption{font-family:var(--mono);font-size:12px;color:var(--soft);margin-top:7px;letter-spacing:.02em}
+/* ---------- code ---------- */
+.tabs{display:flex;gap:4px;margin-bottom:0}
+.tabs button{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--rule);border-bottom:none;border-radius:4px 4px 0 0;padding:7px 12px;color:var(--soft);cursor:pointer;min-height:44px}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);border-color:var(--rule-solid)}
+.pane{border:1px solid var(--rule-solid);border-radius:0 4px 4px 4px;background:var(--card);position:relative}
+.pane pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.55;color:var(--ink);min-height:120px}
+.copy{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--paper-2);border:1px solid var(--rule);border-radius:3px;padding:4px 7px;color:var(--soft);cursor:pointer;min-height:44px;min-width:44px}
+.copy:hover{color:var(--ink)}
+.concept{border-bottom:1px solid var(--rule);padding:18px 0}
+.concept:last-child{border-bottom:none}
+.concept h3{margin:0 0 4px;font-size:15.5px}
+.concept .note{font-size:14.5px;color:var(--muted);margin:10px 0 0;max-width:70ch}
+/* ---------- questions ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.chip{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--rule-solid);border-radius:3px;padding:5px 10px;color:var(--soft);cursor:pointer;min-height:44px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.search{width:100%;font-family:var(--sans);font-size:15.5px;padding:9px 12px;border:1px solid var(--rule-solid);border-radius:4px;background:var(--card);color:var(--ink);margin-bottom:6px}
+.search:focus{outline:2px solid var(--accent);outline-offset:1px}
+details.q{background:var(--card);border:1px solid var(--rule);border-radius:6px;margin-bottom:8px;overflow:hidden}
+details.q>summary{cursor:pointer;padding:12px 16px;font-size:15.5px;font-weight:500;list-style:none;display:flex;gap:10px;align-items:flex-start}
+details.q>summary::-webkit-details-marker{display:none}
+details.q>summary::before{content:"+";font-family:var(--mono);color:var(--accent);flex:none;width:12px}
+details.q[open]>summary::before{content:"−"}
+details.q .body{padding:0 16px 14px 38px;font-size:15.5px}
+details.q .body p{margin-bottom:10px}
+details.q .trap{font-size:14.5px;color:var(--muted);border-left:2px solid var(--accent);padding-left:10px;margin-top:10px;overflow-wrap:anywhere;word-break:break-word}
+.lv{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:2px;flex:none;margin-left:auto;align-self:center}
+.lv.core{background:var(--paper-2);color:var(--soft)}
+.lv.deep{background:var(--accent-tint);color:var(--accent)}
+.known{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule-solid);background:none;border-radius:3px;padding:3px 7px;color:var(--soft);cursor:pointer;flex:none;min-height:44px;min-width:44px}
+.known[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+/* ---------- star ---------- */
+.star-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.star{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:16px 18px}
+.star h3{margin:0 0 2px;font-size:15.5px}
+.star .serves{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.star dl{display:grid;grid-template-columns:16px 1fr;gap:2px 8px;font-size:14.5px}
+.star dt{font-family:var(--mono);font-size:12px;color:var(--soft);padding-top:3px}
+.star dd{color:var(--muted);margin:0}
+.timer{display:flex;align-items:center;gap:12px;margin:16px 0;font-family:var(--mono)}
+.timer .clock{font-size:30px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.timer button{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule-solid);background:var(--card);border-radius:3px;padding:7px 12px;color:var(--muted);cursor:pointer;min-height:44px}
+/* ---------- checks ---------- */
+.check{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--rule);font-size:15px}
+.check:last-child{border-bottom:none}
+.check input{margin-top:4px;accent-color:var(--accent);width:20px;height:20px;flex:none}
+.check label{color:var(--muted)}
+.check label b{color:var(--ink);display:block;font-size:14.5px}
+footer{border-top:1px solid var(--rule);padding:26px 0;font-size:13.5px;color:var(--soft);font-family:var(--mono)}
+/* ---------- basics ---------- */
+.basics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px;margin-top:16px}
+.basic{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:16px 18px}
+.basic h3{margin:0 0 10px;font-size:15.5px;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.brow{display:grid;grid-template-columns:78px 1fr;gap:10px;padding:6px 0;align-items:start}
+.blab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);padding-top:3px}
+.brow p{margin:0;font-size:15px;color:var(--muted);max-width:none}
+.brow.analogy p{color:var(--ink);font-style:italic}
+.brow.line p{color:var(--ink);border-left:2px solid var(--accent);padding-left:9px}
+/* ---------- intro ---------- */
+.beat{border-left:2px solid var(--rule-solid);padding:2px 0 14px 14px;margin-bottom:2px}
+.beat-head{display:flex;align-items:baseline;gap:9px;margin-bottom:4px}
+.beat-n{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em}
+.beat-head b{font-size:15.5px}
+.beat-t{font-family:var(--mono);font-size:11.5px;color:var(--soft);margin-left:auto;letter-spacing:.08em}
+.beat-why{margin:0 0 6px;font-size:14.5px;color:var(--muted)}
+.beat-say{margin:0;font-size:15px;color:var(--ink);background:var(--paper-2);border-radius:4px;padding:9px 12px}
+.script{position:relative;background:var(--card);border:1px solid var(--rule-solid);border-radius:6px;padding:16px 18px;margin:10px 0 18px}
+.script-text{font-size:16px;line-height:1.75;color:var(--ink);max-width:70ch}
+.copy.in{top:10px;right:10px}
+/* ---------- 09 mock ---------- */
+.mk-callout{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:6px;padding:14px 18px;margin:18px 0}
+.mk-callout b{font-size:15.5px}
+.mk-callout p{font-size:15px;color:var(--muted);max-width:70ch}
+.sub{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:28px 0 10px;font-weight:500}
+.wrgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.wrform{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:16px 18px}
+.wrform-head{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--rule);padding-bottom:9px;margin-bottom:11px}
+.wrform-head b{font-size:15px;flex:1}
+.prob{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:3px 6px;white-space:nowrap}
+.wrform-brief{margin:0 0 12px;font-size:14.5px;color:var(--muted)}
+.wrlab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin:12px 0 6px}
+.wrlab.risk{color:var(--accent)}
+.wrform ul{margin:0;padding-left:16px;font-size:14.5px;color:var(--muted)}
+.wrform li{margin-bottom:5px}
+.wrrisk{margin:0;font-size:14px;color:var(--ink);background:var(--accent-tint);border-radius:4px;padding:8px 10px}
+.wrrubric{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:0 24px}
+.rubrow{border-top:1px solid var(--rule);padding:11px 0}
+.rubrow b{font-size:14.5px;display:block;margin-bottom:3px}
+.rubrow p{margin:0;font-size:14.5px;color:var(--muted)}
+.wrplan{border-left:2px solid var(--rule-solid);padding-left:14px;margin-left:2px}
+.planrow{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:7px 0;align-items:start}
+.plant{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.03em;padding-top:2px}
+.planrow p{margin:0;font-size:14.5px;color:var(--muted)}
+.mk-sep{border:none;border-top:1px solid var(--rule-solid);margin:36px 0 26px}
+.mk-phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,166px),1fr));gap:12px;margin:16px 0}
+.phrow{background:var(--card);border:1px solid var(--rule);border-radius:5px;padding:11px 13px}
+.phn{font-family:var(--mono);font-size:11.5px;color:var(--accent);letter-spacing:.1em;margin-right:6px}
+.phrow b{font-size:14px}
+.pht{display:block;font-family:var(--mono);font-size:11px;color:var(--soft);letter-spacing:.08em;margin-top:2px}
+.phrow p{margin:6px 0 0;font-size:13.5px;color:var(--muted);line-height:1.5}
+.mk{background:var(--card);border:1px solid var(--rule-solid);border-radius:8px;margin:18px 0 6px;overflow:hidden}
+.mk-top{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--rule);background:var(--paper-2)}
+.mk-timer{font-family:var(--mono);font-size:20px;font-weight:500;letter-spacing:.04em;min-width:76px}
+.mk-timer.over{color:var(--accent)}
+.mk-barwrap{flex:1;height:3px;background:var(--rule);border-radius:2px;overflow:hidden}
+.mk-bar{height:100%;width:0;background:var(--ink);transition:width .3s linear}
+.mk-dots{display:flex;flex-wrap:wrap;gap:4px;padding:12px 18px;border-bottom:1px solid var(--rule)}
+.dot{font-family:var(--mono);font-size:12px;width:44px;height:44px;border:1px solid var(--rule-solid);background:none;border-radius:3px;color:var(--soft);cursor:pointer;padding:0}
+.dot.cur{border-color:var(--ink);color:var(--ink);font-weight:600}
+.dot.good{border-color:#1f6b45;color:#1f6b45}
+.dot.weak{border-color:var(--accent);color:var(--accent)}
+.mk-body{padding:20px 22px 22px}
+.mk-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mk-ph{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--paper);border-radius:3px;padding:3px 7px}
+.mk-id{font-family:var(--mono);font-size:12px;color:var(--soft);letter-spacing:.08em}
+.mk-idx{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--soft)}
+.mk-q{font-size:18px;line-height:1.45;font-weight:600;margin:0 0 12px;max-width:74ch}
+.mk-why{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:14px}
+.mk-why span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);padding-top:2px}
+.mk-why p{margin:0;font-size:14px;color:var(--muted)}
+.mk-ctrls{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-size:14px;font-weight:500;padding:8px 15px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;min-height:44px}
+.btn:hover{opacity:.88}
+.btn.ghost{background:none;color:var(--muted);border-color:var(--rule-solid)}
+.btn:disabled{opacity:.4;cursor:default}
+.mk-answer{display:none}
+.mk-answer.on{display:block}
+.mk-block{border-left:2px solid var(--rule-solid);padding:0 0 0 13px;margin-bottom:16px}
+.mk-block.red{border-left-color:var(--accent)}
+.mk-block.model{border-left-color:var(--ink);background:var(--paper-2);border-radius:0 4px 4px 0;padding:11px 13px}
+.mk-lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
+.mk-block.red .mk-lab{color:var(--accent)}
+.mk-block ul{margin:0;padding-left:15px;font-size:14.5px;color:var(--muted)}
+.mk-block li{margin-bottom:5px}
+.mk-block p{margin:0;font-size:14.5px;color:var(--ink)}
+.mk-score{display:flex;align-items:center;gap:7px;padding-top:14px;border-top:1px solid var(--rule);flex-wrap:wrap}
+.mk-score>span:first-child{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+.sc{width:44px;height:44px;font-family:var(--mono);font-size:13.5px;border:1px solid var(--rule-solid);background:none;border-radius:3px;color:var(--muted);cursor:pointer;padding:0}
+.sc.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.sc-hint{font-size:13.5px;color:var(--soft);margin-left:6px}
+.mk-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+.mk-result{text-align:center;padding:18px 0 8px}
+.mk-pct{font-family:var(--serif);font-size:58px;line-height:1;color:var(--accent)}
+.mk-verdict{font-size:16px;margin:10px 0 4px;font-weight:500}
+.mk-sub{font-family:var(--mono);font-size:12px;color:var(--soft);letter-spacing:.06em;margin:0}
+/* ---------- 10 coverage ---------- */
+.cov-sum{font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;color:var(--muted);margin:16px 0 8px;padding:10px 12px;background:var(--paper-2);border-radius:4px}
+.cov-sum b{color:var(--ink)}
+.cov-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin-bottom:14px}
+.cov-legend span{display:flex;align-items:center;gap:6px}
+.tier{font-family:var(--mono);font-size:11.5px;font-weight:600;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;border-radius:3px;border:1px solid;flex:none}
+.tier.tA{color:#1f6b45;border-color:#1f6b45;background:rgba(31,107,69,.08)}
+.tier.tB{color:#8a5a00;border-color:#8a5a00;background:rgba(138,90,0,.08)}
+.tier.tC{color:var(--soft);border-color:var(--rule-solid)}
+.cov-table{font-size:14px;table-layout:fixed}
+.cov-table th:first-child,.cov-table td:first-child{width:54px}
+.cov-table th:last-child,.cov-table td:last-child{width:214px}
+.covline{color:var(--ink);line-height:1.5;overflow-wrap:anywhere;word-break:break-word}
+.covqs .pill{display:inline-block;margin:0 4px 4px 0}
+.pill{font-family:var(--mono);font-size:12px;letter-spacing:.05em;border-radius:3px;padding:2px 6px;border:1px solid}
+.pill.unseen{color:var(--soft);border-color:var(--rule-solid)}
+.pill.good{color:#1f6b45;border-color:#1f6b45;background:rgba(31,107,69,.08)}
+.pill.weak{color:var(--accent);border-color:var(--accent);background:var(--accent-tint)}
+.cov-note{font-size:13.5px;color:var(--soft);margin:0 0 6px}
+.unknowable{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,258px),1fr));gap:0 24px}
+.unkrow{border-top:1px solid var(--rule);padding:11px 0}
+.unkrow b{font-size:14.5px;display:block;margin-bottom:3px}
+.unkrow p{margin:0;font-size:14.5px;color:var(--muted)}
+/* ---------- 11 ask them ---------- */
+.dom-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}
+.dom-card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:16px 18px}
+.dom-head{display:flex;align-items:baseline;gap:10px}
+.dom-head b{font-size:15px;flex:1;line-height:1.4}
+.dom-p{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--accent);flex:none}
+.dom-barwrap{height:3px;background:var(--rule);border-radius:2px;overflow:hidden;margin:9px 0 8px}
+.dom-bar{height:100%;background:var(--ink)}
+.dom-short{margin:0 0 10px;font-size:14px;color:var(--soft);font-style:italic}
+.dom-lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:5px}
+.dom-card ul{margin:0 0 10px;padding-left:15px;font-size:14px;color:var(--muted)}
+.dom-card li{margin-bottom:5px}
+.dom-falsify{font-size:13.5px;color:var(--muted);background:var(--paper-2);border-radius:4px;padding:8px 10px;line-height:1.5}
+.dom-falsify b{color:var(--ink)}
+.evlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:0 24px}
+.evrow{border-top:1px solid var(--rule);padding:10px 0}
+.evrow b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:4px}
+.evrow p{margin:0;font-size:14.5px;color:var(--muted)}
+.dec-table{font-size:14px;table-layout:fixed}
+.dec-table th:first-child,.dec-table td:first-child{width:33%}
+.dec-table th:nth-child(2),.dec-table td:nth-child(2){width:130px}
+.dl{color:var(--ink);line-height:1.5}
+.da{color:var(--muted);line-height:1.5}
+.dr{color:var(--accent);line-height:1.5}
+.ask-cnt{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--soft);text-transform:none;margin-left:6px}
+.ask-group{margin-bottom:26px}
+.ask-ghead{display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid var(--rule-solid);padding-bottom:9px;margin-bottom:12px}
+.ask-gn{font-family:var(--mono);font-size:12.5px;color:var(--accent);letter-spacing:.08em;padding-top:2px}
+.ask-ghead b{font-size:15.5px;display:block;margin-bottom:3px}
+.ask-ghead p{margin:0;font-size:14px;color:var(--soft)}
+.ask-item{border-left:2px solid var(--rule);padding-left:13px;margin-bottom:16px}
+.ask-q{font-size:15px;font-weight:500;color:var(--ink);line-height:1.55;margin-bottom:5px}
+.ask-n{font-family:var(--mono);font-size:11.5px;color:var(--accent);letter-spacing:.06em;margin-right:8px}
+.ask-why{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.ask-ab{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ask-good,.ask-bad{border-radius:4px;padding:8px 10px}
+.ask-good{background:rgba(31,107,69,.06);border:1px solid rgba(31,107,69,.25)}
+.ask-bad{background:var(--accent-tint);border:1px solid rgba(191,69,32,.25)}
+.ask-ab b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:4px}
+.ask-good b{color:#1f6b45}
+.ask-bad b{color:var(--accent)}
+.ask-ab p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5}
+@media(max-width:700px){.ask-ab{grid-template-columns:1fr}}
+/* ---------- 05 bank (từ research) ----------
+   Cỡ chữ ở đây đặt cho TIẾNG VIỆT ĐỌC TRÊN MÀN HÌNH, không phải cho SVG zoom được.
+   Dấu mũ và dấu thanh mất nét dưới 12px, nên sàn nhãn là 11px và sàn chữ đọc là 15px. */
+.bank-stat{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--muted);background:var(--paper-2);border-radius:6px;padding:11px 14px;margin-bottom:16px}
+.bank-stat b{color:var(--ink);font-size:13px}
+.bank-stat .muted{color:var(--soft);margin-left:auto;font-size:11.5px}
+.qb{border-bottom:1px solid var(--rule)}
+.qb summary{align-items:flex-start;gap:11px;padding:14px 2px;flex-wrap:wrap}
+.qb .qid{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--accent);letter-spacing:.04em;flex:none;padding-top:3px;min-width:32px}
+.qb .qtopic{flex:1;font-size:15.5px;font-weight:500;line-height:1.5;color:var(--ink);overflow-wrap:anywhere;word-break:break-word;min-width:0}
+.qb .qmeta{display:flex;gap:6px;flex:none;padding-top:3px;align-items:center}
+.prio{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:2px 6px;border-radius:3px;flex:none}
+.prio-P0{background:var(--accent);color:#fff;font-weight:500}
+.prio-P1{background:transparent;color:var(--muted);border:1px solid var(--rule-solid)}
+.prio-P2{background:transparent;color:var(--soft);border:1px solid var(--rule)}
+.lvl{font-family:var(--mono);font-size:11px;color:var(--soft);letter-spacing:.02em;padding:2px 0}
+.qtype{font-family:var(--mono);font-size:10.5px;color:var(--link);border:1px solid rgba(46,90,168,.28);border-radius:3px;padding:2px 6px;flex:none;letter-spacing:.02em}
+.qask{font-size:16.5px;font-weight:500;line-height:1.55;color:var(--ink);background:var(--paper-2);border-radius:6px;padding:13px 15px;margin-bottom:14px;overflow-wrap:anywhere;word-break:break-word;min-width:0}
+.qask b{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);display:block;margin-bottom:6px;font-weight:500}
+.qb .qtopic{flex:0 1 auto;font-size:15.5px;font-weight:500;line-height:1.5;color:var(--ink);overflow-wrap:anywhere;word-break:break-word;min-width:0}
+.anchor b{font-family:var(--mono);font-style:normal;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:4px;font-weight:500}
+.qblock{margin-bottom:16px}
+.qblock-lab{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;font-weight:500}
+.qblock-body{font-size:15.5px;line-height:1.75;color:var(--muted);overflow-wrap:anywhere;word-break:break-word;min-width:0}
+.qblock-body p{margin:0 0 10px}
+.qblock-body p:last-child{margin-bottom:0}
+.qblock-body ul{margin:0;padding-left:18px;min-width:0}
+.qblock-body li{margin-bottom:7px;overflow-wrap:anywhere;word-break:break-word}
+.qblock-body code{font-size:14px;background:var(--paper-2);padding:1px 4px;border-radius:3px;color:var(--ink);overflow-wrap:anywhere;word-break:break-word}
+.probe{border-left:2px solid var(--rule-solid);padding-left:12px;margin-bottom:10px}
+.probe summary{font-size:15px;color:var(--ink);cursor:pointer;line-height:1.6;font-weight:500;overflow-wrap:anywhere;word-break:break-word}
+.probe-a{font-size:14.5px;color:var(--muted);line-height:1.72;padding:8px 0 0 2px;overflow-wrap:anywhere;word-break:break-word}
+.qb .body{padding-bottom:18px;min-width:0}
+.qteaser{color:var(--soft);font-size:14px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+details[open] .qteaser{display:none}
+.qstory{background:var(--paper-2);border-radius:6px;padding:13px 15px;margin-bottom:14px;font-size:15.5px;line-height:1.75;color:var(--ink);overflow-wrap:anywhere;word-break:break-word;min-width:0}
+.qstory-lab{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);display:block;margin-bottom:6px;font-weight:500}
+.qstory p{margin:0 0 10px}
+.qstory p:last-child{margin-bottom:0}
+.qgate[hidden]{display:none}
+.reveal-btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:6px 10px;color:#fff;cursor:pointer;margin-bottom:14px}
+.selfscore{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px}
+.selfscore .sc-hint{font-size:13.5px;color:var(--soft);margin-left:6px}
+.session{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--paper-2);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;margin:14px 0 24px;max-width:100%}
+.session b{font-size:15px}
+.session button{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:7px 12px;color:#fff;cursor:pointer}
+.session span{font-family:var(--mono);font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.ifthen{display:block;margin:14px 0 0}
+.ifthen-lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);display:block;margin-bottom:6px}
+.ifthen input{width:100%;font-family:var(--sans);font-size:15px;padding:9px 12px;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2);color:var(--ink);box-sizing:border-box;max-width:100%}
+.ifthen input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.teach-btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--rule);border-radius:3px;padding:6px 10px;color:var(--muted);cursor:pointer;margin-bottom:14px}
+.teach-btn:hover{color:var(--ink)}
+@media(max-width:700px){.qteaser{display:none}.bank-stat .muted{display:none}.qask{font-size:16px}.qblock-body{font-size:15px}}
+button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visible,.sc:focus-visible,.copy:focus-visible,.known:focus-visible,input:focus-visible,.diagram-container:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar i,.mk-bar{transition:none}}
+@media print{.side{display:none}.app{display:block}.diagram-container{overflow:visible}.diagram-container svg{min-width:0}.mk-dots,.mk-nav,.mk-ctrls{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<aside class="side">
+  <div class="brand"><span>Prep · 2026-11-07</span>HiTechCloud</div>
+  <nav class="nav" id="nav">
+    <a href="#basics"><span class="num">00</span>Giải thích từ đầu</a>
+    <a href="#overview"><span class="num">01</span>Bản đồ 90 phút</a>
+    <a href="#aws"><span class="num">02</span>AWS: S3 · EC2 · Lambda</a>
+    <a href="#fw"><span class="num">03</span>Vue ↔ React</a>
+    <a href="#core"><span class="sec-num">★</span>Cơ chế lõi</a>
+    <a href="#practice"><span class="num">04</span>Bài tập CRUD</a>
+    <a href="#bank"><span class="num">05</span>Ngân hàng câu hỏi</a>
+    <a href="#star"><span class="num">06</span>Sáu chuyện STAR</a>
+    <a href="#company"><span class="num">07</span>Công ty &amp; hợp đồng</a>
+    <a href="#intro"><span class="num">08</span>Giới thiệu bản thân</a>
+    <a href="#mock"><span class="num">09</span>Mock interview</a>
+    <a href="#coverage"><span class="num">10</span>Dự đoán đề</a>
+    <a href="#ask"><span class="num">11</span>Hỏi lại họ</a>
+  </nav>
+  <div class="progress-wrap">
+    <div class="lab"><span>Đã thuộc</span><span id="pcount">0/0</span></div>
+    <div class="bar"><i id="pbar"></i></div>
+  </div>
+</aside>
+
+<main>
+  <p class="eyebrow">Fullstack Engineer · AWS · Python · VueJS</p>
+  <h1>Ôn tập có đích danh</h1>
+  <p class="lead">Toàn bộ nội dung dưới đây bám theo một JD cụ thể và một hồ sơ cụ thể: Python + TypeScript + AI/RAG có đo chi phí, không có AWS production và không có Vue production; S3, EC2, Lambda là ba dịch vụ JD hỏi nặng nhất và cũng là khoảng trống cần tự dựng trên sandbox từng bước mỗi tuần.</p>
+  <label class="ifthen"><span class="ifthen-lab">Nếu–thì của hôm nay</span><input id="ifthenInput" type="text" value="Nếu mở trang lúc 8:00, thì làm 12 thẻ P0 trước khi mở đáp án" autocomplete="off"></label>
+  <div class="session" id="session"><b>Phiên 2 giờ · 12 thẻ · 20 phút</b><button type="button" id="sessionStart">Bắt đầu</button><span id="sessionClock" hidden></span></div>
+  <!-- ============ 00 ============ -->
+  <section id="basics">
+    <div class="sec-head"><span class="sec-num">00</span><h2>Giải thích từ đầu</h2></div>
+<p>Câu "Bucket private, user tải file thế nào?" gần như chắc chắn được hỏi, và đáp án có hai phần: presigned URL cộng kiểm quyền.</p>
+<p>Mỗi thẻ có bốn tầng, theo đúng thứ tự bạn cần:</p>
+<ul>
+<li><b>ví von</b> (hiểu bằng trực giác)</li>
+<li><b>thực tế</b> (nó là gì)</li>
+<li><b>vì sao nó tồn tại</b> (câu hỏi mà người phỏng vấn thật sự muốn biết)</li>
+<li><b>câu nói khi được hỏi</b> (một câu trả lời dùng được ngay)</li>
+</ul>
+  <div class="basics-grid" id="basicsGrid"></div>
+    <p>Hiểu bốn tầng này rồi, mục 01 xếp 90 phút học theo P0 trước.</p>
+</section>
+
+  <!-- ============ 01 ============ -->
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">01</span><h2>Bản đồ 90 phút</h2></div>
+    <p>Thuộc ba câu này trước khi đọc bảng 90 phút: một câu sai về S3, Vue hay Lambda là vòng 3 dừng lại.</p>
+    <h3>Ba câu phải trả lời được ngay, không vòng vo</h3>
+    <ol>
+      <li><b>"Bucket private, user tải file thế nào?"</b> → xem mục 02: presigned URL không thay cho kiểm quyền.</li>
+      <li><b>"ref khác reactive thế nào?"</b> → câu Vue đầu tiên gần như chắc chắn bị hỏi.</li>
+      <li><b>"Lambda khác EC2 ở đâu, khi nào không nên dùng?"</b> → câu này hay được dùng để phân biệt người đã vận hành thật với người mới đọc lý thuyết — nên phải trả lời được kể cả khi mình đang ở nhóm thứ hai.</li>
+    </ol>
+    <p>Đọc hết trang này mất khoảng 90 phút. Thứ tự dưới đây xếp theo <em>khả năng được hỏi × mức rủi ro của bạn</em>, không theo độ quan trọng tuyệt đối.</p>
+    <table>
+      <thead><tr><th scope="col">Ưu tiên</th><th scope="col">Phần</th><th scope="col">Vì sao đứng ở đây</th></tr></thead>
+      <tbody>
+        <tr><td>P0 (chắc chắn bị hỏi)</td><td>S3 · EC2 · Lambda</td><td>JD hỏi ba dịch vụ này nặng nhất, nhưng bạn chưa có AWS production: tự dựng S3/EC2/Lambda từng bước trên sandbox, lặp mỗi tuần vì đây là khoảng trống lớn nhất</td></tr>
+        <tr><td>P0 (chắc chắn bị hỏi)</td><td>Vue 3 (đủ để viết CRUD)</td><td>JD (mô tả công việc) ghi thẳng "thành thạo VueJS"; bạn chưa có dòng nào</td></tr>
+        <tr><td>P1 (có thể)</td><td>React — bảo vệ thế mạnh</td><td>Bạn viết React thật; đừng để bị hỏi sâu mà trả lời hời hợt</td></tr>
+        <tr><td>P1 (có thể)</td><td>Lambda + API Gateway + IaC</td><td>Phần bạn chưa tự dựng — cần nói được bản đồ, không cần giả vờ</td></tr>
+        <tr><td>P2 (hiếm)</td><td>DynamoDB, CloudFormation chi tiết</td><td>JD cho phép RDS; chỉ cần nêu tiêu chí chọn</td></tr>
+        <tr><td>P2 (hiếm)</td><td>Python/FastAPI nâng cao</td><td>Bạn mạnh sẵn — chỉ cần giữ phong độ</td></tr>
+      </tbody>
+    </table>
+
+
+    <div class="card warn">
+      <div class="card-lab">Câu mở đầu, học thuộc</div>
+      <p style="margin:0">"Em chưa có AWS production. Ở Rikkeisoft em làm frontend React cho Jinjer HRM và AKAS Bank — dashboard, biểu đồ dữ liệu, form tái sử dụng. Phần chuyển giao được là thiết kế dữ liệu PostgreSQL, chạy container cục bộ, CI/CD, và thói quen log chi phí theo từng route từ UniGuide. Ba dịch vụ S3, EC2, Lambda là phần JD đào sâu nhất và em chưa tự dựng từ đầu: em học trên sandbox, bắt đầu với bucket private và presigned URL, rồi tới máy chủ container, rồi tới một hàm xử lý sự kiện, mỗi bước đều có kiểm tra và log chi phí riêng."</p>
+    </div>
+    <p>Bản đồ xong, mục 02 đi sâu vào S3, EC2, Lambda — ba dịch vụ JD hỏi nặng nhất và là khoảng trống của bạn.</p>
+  </section>
+
+  <!-- ============ 02 ============ -->
+  <section id="aws">
+    <div class="sec-head"><span class="sec-num">02</span><h2>AWS: S3 · EC2 · Lambda</h2></div>
+    <p>Lần gọi đầu sau khi sandbox bị thu hồi trả giá INIT; presigned URL mà bỏ kiểm quyền là cho người lạ tải file.</p>
+    <p>Ba dịch vụ JD hỏi nặng nhất. Mục tiêu không phải học thêm dịch vụ mới, mà tự dựng ba cái này <b>từ đầu trên sandbox, sâu đến mức không đào thêm được</b>.</p>
+
+    <h3>Đường đi một request trên AWS</h3>
+    <figure>
+      <div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+        <svg viewBox="0 110 960 305" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="aws-path-title aws-path-desc">
+          <title id="aws-path-title">Đường đi request trên AWS cho stack của JD</title>
+          <desc id="aws-path-desc">Trình duyệt gọi API Gateway; API Gateway định tuyến tới Lambda hoặc ECS Fargate; hai đường compute này đọc ghi RDS PostgreSQL và S3. Lambda được đánh dấu là phần còn thiếu.</desc>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+            <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+          </defs>
+          <rect x="0" y="110" width="960" height="305" fill="#f5f5f5"/>
+
+          <!-- arrows first -->
+          <path d="M190,228 H250" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+          <path d="M400,212 H437 Q445,212 445,204 V176 Q445,168 453,168 H470" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+          <path d="M400,244 H437 Q445,244 445,252 V280 Q445,288 453,288 H470" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+          <path d="M620,168 H700" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+          <path d="M620,184 H664 Q672,184 672,192 V248 Q672,256 680,256 H700" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+          <path d="M620,284 H700" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+          <!-- Browser -->
+          <rect x="40" y="200" width="150" height="56" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+          <rect x="48" y="208" width="30" height="12" rx="2" fill="#ececec"/>
+          <text x="63" y="217" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.14em">USER</text>
+          <text x="48" y="238" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Trình duyệt</text>
+          <text x="48" y="250" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">React / Vue</text>
+
+          <!-- API Gateway -->
+          <rect x="250" y="200" width="150" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1.2"/>
+          <rect x="258" y="208" width="28" height="12" rx="2" fill="#ececec"/>
+          <text x="272" y="217" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.14em">EDGE</text>
+          <text x="258" y="238" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">API Gateway</text>
+          <text x="258" y="250" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">HTTP API · JWT</text>
+
+          <!-- Lambda (focal) -->
+          <rect x="470" y="140" width="150" height="56" rx="6" fill="#fdf0ea" stroke="#bf4520" stroke-width="1.6"/>
+          <rect x="478" y="148" width="44" height="12" rx="2" fill="#ffffff"/>
+          <text x="500" y="157" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#bf4520" letter-spacing="0.14em">COMPUTE</text>
+          <text x="478" y="178" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Lambda</text>
+          <text x="478" y="190" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">Python / FastAPI</text>
+
+          <!-- ECS -->
+          <rect x="470" y="260" width="150" height="56" rx="6" fill="#f2f2f4" stroke="#4f5d75" stroke-width="1.2"/>
+          <rect x="478" y="268" width="44" height="12" rx="2" fill="#ffffff"/>
+          <text x="500" y="277" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.14em">COMPUTE</text>
+          <text x="478" y="298" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">ECS Fargate</text>
+          <text x="478" y="310" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">container</text>
+
+          <!-- RDS -->
+          <rect x="700" y="140" width="150" height="56" rx="6" fill="#ececec" stroke="#4f5d75" stroke-width="1.2"/>
+          <rect x="708" y="148" width="34" height="12" rx="2" fill="#ffffff"/>
+          <text x="725" y="157" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.14em">STORE</text>
+          <text x="708" y="178" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">RDS PostgreSQL</text>
+          <text x="708" y="190" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">private subnet</text>
+
+          <!-- S3 -->
+          <rect x="700" y="240" width="150" height="56" rx="6" fill="#ececec" stroke="#4f5d75" stroke-width="1.2"/>
+          <rect x="708" y="248" width="34" height="12" rx="2" fill="#ffffff"/>
+          <text x="725" y="257" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.14em">STORE</text>
+          <text x="708" y="278" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">S3</text>
+          <text x="708" y="290" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">presigned · private</text>
+
+          <!-- legend -->
+          <rect x="40" y="368" width="12" height="12" rx="2" fill="#fdf0ea" stroke="#bf4520" stroke-width="1.4"/>
+          <text x="58" y="377" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.06em">ĐIỂM THIẾU CỦA BẠN</text>
+          <rect x="212" y="368" width="12" height="12" rx="2" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="230" y="377" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.06em">PHẦN BẠN ĐANG TỰ DỰNG</text>
+
+          <text x="40" y="406" font-family="'Instrument Serif',serif" font-style="italic" font-size="13" fill="#4f5d75">Lambda là phần bạn chưa tự dựng từ đầu — hai nhánh còn lại bạn đang tự dựng trên sandbox, chưa phải production.</text>
+        </svg>
+      </div>
+      <figcaption>Hình 1 · Architecture — hai đường compute dùng cùng một cổng vào và cùng tầng lưu trữ.</figcaption>
+    </figure>
+
+    <h3>S3: câu hỏi tiếp theo sau "em có dùng S3"</h3>
+    <p>Người phỏng vấn của công ty cloud sẽ không dừng ở "có dùng". Họ hỏi ngay: bucket private hay public, ai ký URL, hạn bao lâu, kiểm quyền ở đâu. Học hình dưới đây là học luôn câu trả lời.</p>
+
+    <figure>
+      <div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+        <svg viewBox="0 0 960 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="s3-pre-title s3-pre-desc">
+          <title id="s3-pre-title">Luồng upload bằng presigned URL</title>
+          <desc id="s3-pre-desc">Trình duyệt gửi yêu cầu tới API; API kiểm quyền, tạo presigned URL và trả về; trình duyệt PUT file thẳng lên S3 và nhận 200 kèm ETag.</desc>
+          <defs>
+            <marker id="arr2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+            <marker id="arr2-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+            <marker id="arr2-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+          </defs>
+          <rect width="960" height="470" fill="#f5f5f5"/>
+
+          <!-- lifelines -->
+          <line x1="180" y1="92" x2="180" y2="424" stroke="#2d3142" stroke-opacity="0.2" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="480" y1="92" x2="480" y2="424" stroke="#2d3142" stroke-opacity="0.2" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="780" y1="92" x2="780" y2="424" stroke="#2d3142" stroke-opacity="0.2" stroke-width="1" stroke-dasharray="3,3"/>
+
+          <!-- messages -->
+          <path d="M188,150 H472" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arr2)"/>
+          <rect x="292" y="126" width="76" height="14" fill="#f5f5f5"/>
+          <text x="330" y="136" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#4f5d75" letter-spacing="0.06em">POST /files</text>
+
+          <path d="M488,196 H520 Q528,196 528,204 V212 Q528,220 520,220 H488" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arr2)"/>
+          <rect x="534" y="200" width="94" height="14" fill="#f5f5f5"/>
+          <text x="538" y="210" font-family="'Geist Mono',monospace" font-size="11" fill="#4f5d75" letter-spacing="0.04em">auth + presign</text>
+
+          <path d="M472,270 H188" fill="none" stroke="#bf4520" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arr2-accent)"/>
+          <rect x="282" y="246" width="96" height="14" fill="#f5f5f5"/>
+          <text x="330" y="256" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#bf4520" letter-spacing="0.06em">URL ký · 5 phút</text>
+
+          <path d="M188,330 H772" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arr2-link)"/>
+          <rect x="430" y="306" width="100" height="14" fill="#f5f5f5"/>
+          <text x="480" y="316" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#2e5aa8" letter-spacing="0.06em">PUT bytes</text>
+
+          <path d="M772,390 H188" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+          <rect x="426" y="366" width="108" height="14" fill="#f5f5f5"/>
+          <text x="480" y="376" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#4f5d75" letter-spacing="0.06em">200 + ETag</text>
+
+          <!-- activation bars -->
+          <rect x="476" y="150" width="8" height="120" fill="#ececec" stroke="#4f5d75" stroke-width="0.8"/>
+          <rect x="776" y="330" width="8" height="60" fill="#ececec" stroke="#4f5d75" stroke-width="0.8"/>
+
+          <!-- actors -->
+          <rect x="110" y="48" width="140" height="44" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="180" y="68" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Trình duyệt</text>
+          <text x="180" y="82" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">client</text>
+
+          <rect x="410" y="48" width="140" height="44" rx="6" fill="#f2f2f4" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="480" y="68" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">API · FastAPI</text>
+          <text x="480" y="82" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">private</text>
+
+          <rect x="710" y="48" width="140" height="44" rx="6" fill="#ececec" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="780" y="68" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">S3</text>
+          <text x="780" y="82" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">bucket private</text>
+
+          <!-- legend -->
+          <line x1="110" y1="446" x2="140" y2="446" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="148" y="449" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.06em">GỌI</text>
+          <line x1="215" y1="446" x2="245" y2="446" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="253" y="449" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.06em">TRẢ VỀ</text>
+          <line x1="340" y1="446" x2="370" y2="446" stroke="#bf4520" stroke-width="1.4" stroke-dasharray="4,3"/>
+          <text x="378" y="449" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.06em">KẾT QUẢ CHÍNH</text>
+          <line x1="505" y1="446" x2="535" y2="446" stroke="#2e5aa8" stroke-width="1.2"/>
+          <text x="543" y="449" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580" letter-spacing="0.06em">ĐI THẲNG SANG S3</text>
+        </svg>
+      </div>
+      <figcaption>Hình 2 · Sequence — điểm cốt lõi là file không đi qua server.</figcaption>
+    </figure>
+
+    <div class="card warn">
+      <div class="card-lab">Bẫy hay gặp</div>
+      <p style="margin:0">Presigned URL <b>không</b> thay cho kiểm quyền. S3 không biết user của bạn là ai; quyền phải kiểm ở API trước khi ký. Bỏ bước đó là ai có link cũng tải được trong thời hạn URL.</p>
+    </div>
+
+    <h3>Lambda: vòng đời một sandbox</h3>
+    <p>Câu "cold start là gì" chỉ trả lời được trọn vẹn nếu bạn vẽ được hình này và nói đúng chỗ nào tốn thời gian.</p>
+
+    <figure>
+      <div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+        <svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lam-life-title lam-life-desc">
+          <title id="lam-life-title">Vòng đời một Lambda sandbox</title>
+          <desc id="lam-life-desc">Sandbox khởi tạo, nhận request, trả kết quả rồi đóng băng; request tiếp theo dùng lại sandbox đã ấm; lỗi hoặc timeout đưa hàm sang trạng thái lỗi.</desc>
+          <defs>
+            <marker id="arr3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+            <marker id="arr3-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+          </defs>
+          <rect width="960" height="400" fill="#f5f5f5"/>
+
+          <!-- transitions first -->
+          <path d="M86,180 H130" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arr3)"/>
+          <path d="M270,180 H330" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arr3)"/>
+          <rect x="268" y="160" width="64" height="14" fill="#f5f5f5"/>
+          <text x="300" y="170" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#4f5d75" letter-spacing="0.06em">cold start</text>
+
+          <path d="M470,180 H530" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arr3)"/>
+          <rect x="478" y="160" width="44" height="14" fill="#f5f5f5"/>
+          <text x="500" y="170" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#4f5d75" letter-spacing="0.06em">freeze</text>
+
+          <path d="M600,152 V104 Q600,96 592,96 H408 Q400,96 400,104 V152" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arr3)"/>
+          <rect x="468" y="76" width="64" height="14" fill="#f5f5f5"/>
+          <text x="500" y="86" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#4f5d75" letter-spacing="0.06em">warm reuse</text>
+
+          <path d="M400,208 V290" fill="none" stroke="#bf4520" stroke-width="1.2" marker-end="url(#arr3-accent)"/>
+          <rect x="406" y="240" width="90" height="14" fill="#f5f5f5"/>
+          <text x="410" y="250" font-family="'Geist Mono',monospace" font-size="11" fill="#bf4520" letter-spacing="0.04em">timeout / 5xx</text>
+
+          <path d="M470,318 H752" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+          <!-- start / end -->
+          <circle cx="80" cy="180" r="6" fill="#2d3142"/>
+          <circle cx="760" cy="318" r="8" fill="none" stroke="#2d3142" stroke-width="1.4"/>
+          <circle cx="760" cy="318" r="5" fill="#2d3142"/>
+
+          <!-- states -->
+          <rect x="130" y="152" width="140" height="56" rx="8" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="200" y="176" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">INIT</text>
+          <text x="200" y="192" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">nạp code + SDK</text>
+
+          <rect x="330" y="152" width="140" height="56" rx="8" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="400" y="176" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">INVOKE</text>
+          <text x="400" y="192" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">handler chạy</text>
+
+          <rect x="530" y="152" width="140" height="56" rx="8" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+          <text x="600" y="176" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">FROZEN</text>
+          <text x="600" y="192" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#5a6580">giữ RAM, không tính</text>
+
+          <rect x="330" y="290" width="140" height="56" rx="8" fill="#fdf0ea" stroke="#bf4520" stroke-width="1.6"/>
+          <text x="400" y="314" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">ERROR</text>
+          <text x="400" y="330" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" fill="#bf4520">hỏng sandbox</text>
+
+          <text x="40" y="378" font-family="'Instrument Serif',serif" font-style="italic" font-size="13" fill="#4f5d75">Câu bị hỏi nhiều nhất: lần gọi đầu sau khi sandbox bị thu hồi trả giá INIT; mọi lần sau chỉ trả giá INVOKE.</text>
+        </svg>
+      </div>
+      <figcaption>Hình 3 · State machine — cold start là trạng thái INIT, không phải "Lambda chậm".</figcaption>
+    </figure>
+
+    <h3>Điều phải nói được về Lambda, trong 20 giây</h3>
+    <ul>
+      <li>Timeout tối đa <b>15 phút</b>, RAM 128 MB–10 GB (CPU scale theo RAM), <code>/tmp</code> tới 10 GB.</li>
+      <li>Khởi tạo SDK/client <b>ngoài</b> handler để tái dùng qua các lần gọi ấm.</li>
+      <li>Mỗi sandbox một connection pool DB → cạn connection khi scale; dùng <b>RDS Proxy</b>.</li>
+      <li>Không hợp: job dài, streaming lâu, websocket, batch nặng. Hợp: API ngắn, xử lý sự kiện S3/SQS, cron.</li>
+      <li>Local: không có AWS trên máy thì chạy LocalStack hoặc dựng lại bằng container; chưa có AWS production, nên đừng nói dối là đã chạy production.</li>
+    </ul>
+
+    <h3>EC2 — học theo chiều sâu, từ sandbox tới nền tảng thật</h3>
+    <ul>
+      <li><b>Security group</b> stateful, chỉ allow, theo instance/ENI. <b>NACL</b> stateless, có deny, theo subnet.</li>
+      <li><b>Private subnet</b> gọi S3 qua <b>VPC Gateway Endpoint</b> (miễn phí) hoặc NAT Gateway (tính theo GB).</li>
+      <li>Ứng dụng lấy quyền bằng <b>IAM instance profile</b>, không phải access key trong <code>.env</code>.</li>
+      <li>Một máy là single point of failure → nhiều AZ + ALB + Auto Scaling Group + health check.</li>
+      <li>Tắt máy không tính compute nhưng <b>EBS vẫn tính tiền</b>.</li>
+    </ul>
+    <p>Hạ tầng xong, bước tiếp là đối chiếu từng API Vue với React — gần như cùng mô hình, khác cú pháp.</p>
+  </section>
+
+  <!-- ============ 03 ============ -->
+  <section id="fw">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Vue ↔ React, cạnh nhau</h2></div>
+    <p>JD ghi thẳng VueJS, bạn chưa có dòng nào: CRUD hoàn chỉnh này cho bằng chứng.</p>
+    <p>Trước khi xem bảng, nhớ một đối chiếu: <code>ref</code> giữ một giá trị theo dõi được, <code>reactive</code> giữ một object; React gọi ý tưởng tương đương là <code>useState</code>.</p>
+    <div id="concepts"></div>
+    <p>Đã nắm cú pháp hai bên, mục 04 dùng một đề CRUD để chứng minh bạn thật sự viết được.</p>
+  </section>
+  <!-- ============ CORE ============ -->
+  <section id="core">
+    <div class="sec-head"><span class="sec-num">★</span><h2>Cơ chế lõi: Vue, React, FastAPI</h2></div>
+    <p>Proxy chỉ chặn, còn track mới ghi nhớ ai đọc; lát nữa bạn sẽ trả lời cả ba cơ chế này trong mười giây.</p>
+    <h3>Vue 3: Proxy chặn, dependency graph làm trang cập nhật</h3>
+    <p><code>reactive(obj)</code> trả về một <code>Proxy</code>. Proxy handler chặn <code>get</code> và <code>set</code>: khi đọc, <code>track(target, key)</code> ghi effect đang chạy vào dependency map <code>targetMap</code>.</p>
+    <p><code>effect(fn)</code> đặt <code>activeEffect</code> trong lúc <code>fn()</code> chạy, nên <code>track</code> biết <em>ai</em> đang đọc — không có nó, Proxy chặn được nhưng không biết chạy lại cái gì. Khi ghi, <code>trigger(target, key)</code> đọc <code>targetMap</code> và chạy lại các effect đã ghi.</p>
+    <p><code>ref(x)</code> tồn tại vì Proxy không bọc được primitive (number/string/boolean): nó trả về object có getter/setter <code>.value</code> gọi <code>track</code>/<code>trigger</code>, và template tự unwrap top-level ref nên viết <code>count</code> thay vì <code>count.value</code> hay <code>theme.value</code>. <code>computed</code> là effect có cache và dirty flag, chỉ tính lại khi dependency đổi; <code>watch</code> là effect có scheduler, trì hoãn callback thay vì chạy thẳng trong <code>trigger</code>. Vue 2 dùng <code>Object.defineProperty</code> cho từng key nên không thấy thêm/xóa property, phải cần <code>Vue.set</code>/<code>Vue.delete</code>, mảng phải vá method; Proxy của Vue 3 bỏ các giới hạn đó. Xem sơ đồ trước, phần chi tiết nằm ở ngay dưới đây.</p>
+    <figure><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+      <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="vue-core-title vue-core-desc">
+        <title id="vue-core-title">Sơ đồ reactivity của Vue 3: render đọc qua Proxy, track ghi dependency, set trigger chạy lại</title>
+        <desc id="vue-core-desc">Render effect đọc thuộc tính qua Proxy; get gọi track ghi vào targetMap; set gọi trigger; trigger chạy lại render effect.</desc>
+        <defs><marker id="core-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker><marker id="core-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker></defs>
+        <rect x="0" y="0" width="960" height="330" fill="#f5f5f5"/>
+        <path d="M220,150 H270" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#core-arrow)"/>
+        <path d="M440,130 H495" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#core-arrow)"/>
+        <path d="M445,170 H472 V230 H500" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#core-arrow)"/>
+        <path d="M585,160 V195" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#core-arrow)"/>
+        <path d="M670,230 H740 V180" fill="none" stroke="#bf4520" stroke-width="1.2" marker-end="url(#core-arrow-accent)"/>
+        <rect x="453" y="209" width="34" height="16" fill="#f5f5f5"/><text x="470" y="222" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">set</text>
+        <rect x="591" y="170" width="38" height="16" fill="#f5f5f5"/><text x="610" y="183" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">read</text>
+        <rect x="645" y="209" width="120" height="16" fill="#f5f5f5"/><text x="705" y="222" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#bf4520">trigger → re-run</text>
+        <rect x="40" y="120" width="180" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="130" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Render effect</text>
+        <text x="130" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">effect(fn)</text>
+        <rect x="275" y="120" width="170" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="360" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Proxy</text>
+        <text x="360" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">get · set</text>
+        <rect x="500" y="100" width="170" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="585" y="125" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Dependency map</text>
+        <text x="585" y="144" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">targetMap</text>
+        <rect x="500" y="200" width="170" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="585" y="225" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Dữ liệu reactive</text>
+        <text x="585" y="244" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">reactive(obj)</text>
+        <rect x="685" y="120" width="200" height="60" rx="6" fill="#fdf0ea" stroke="#bf4520" stroke-width="1.6"/>
+        <text x="785" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Chạy lại effect</text>
+        <text x="785" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">re-run render</text>
+      </svg>
+    </div><figcaption>Hình 4 · Vue 3 reactivity — get/track ghi dependency, set/trigger chạy lại.</figcaption></figure>
+    <div class="card warn"><div class="card-lab">Lầm tưởng</div><ul><li><b>"Proxy là reactivity"</b> — Proxy chỉ chặn; dependency graph (track/trigger) mới làm trang cập nhật.</li><li><b>"Destructure reactive object là ổn"</b> — nó phá reactivity, vì bạn đọc giá trị một lần và bỏ qua getter.</li><li><b>"reactive dùng cho primitive được"</b> — không dùng được; đó chính là lý do có <code>ref</code>.</li></ul></div>
+    <div class="qstory"><span class="qstory-lab">Pattern hay gặp</span><p>Trong một composable, <code>const { theme } = useSettings()</code> với <code>useSettings</code> trả về một <code>reactive</code> object; preview của theme ngừng cập nhật sau render đầu tiên. Nguyên nhân gốc: destructuring chỉ đọc property một lần.</p></div>
+    <p><b>Hệ quả nghiệp vụ (pattern, không phải ca anh gặp):</b> trên dashboard HRM, một derived number không vẽ lại sẽ giữ số cũ trong kỳ payroll đang mở; HR chốt bảng theo số đó, rồi kỳ lương phải chạy lại để sửa và giải thích lại cho nhân viên — cộng thời gian hỗ trợ truy lại màn hình nào đã nói dối.</p>
+    <p><b>Nói trong phỏng vấn:</b> "Proxy chặn get/set, track ghi ai đã đọc, trigger chạy lại đúng những ai đó."</p>
+    <p>Video: <a href="https://www.youtube.com/watch?v=NZfNS4sJ8CI" target="_blank" rel="noopener">Reactivity in Vue 3 - How does it work? — Vue Mastery</a></p>
+    <h3>React: render lại, diff, commit — hooks nằm trên fiber theo thứ tự gọi</h3>
+    <p>Component là một hàm; UI là hàm của props và state. <code>setState</code> lên lịch render lại: React gọi lại component function và diff cây element trả về với cây trước (reconciliation); DOM chỉ bị chạm ở chỗ diff chỉ ra.</p>
+    <p>Fiber là nút (node) đại diện cho một component trong một lần render, giữ state và danh sách hook của nó. Hooks sống trên fiber node dưới dạng linked list (<code>memoizedState</code>), được tiêu thụ theo <b>thứ tự gọi</b> — nên hooks không được gọi có điều kiện và phải giữ cùng thứ tự mỗi render.</p>
+    <p><code>useState</code> trả về giá trị của <em>lần render này</em> cộng setter. Setter không sửa (mutate) biến closure của bạn; giá trị mới chỉ tồn tại ở render sau, nên callback cũ vẫn thấy giá trị cũ — đó là nguồn bug "stale closure" trong <code>useEffect</code>/callback. <code>useEffect</code> chạy sau paint; cleanup của nó chạy trước effect kế tiếp hoặc khi unmount.</p>
+    <figure><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+      <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="react-core-title react-core-desc">
+        <title id="react-core-title">Sơ đồ render của React: state đổi, render lại, diff, commit DOM</title>
+        <desc id="react-core-desc">State thay đổi khiến React render lại component, diff cây element, commit phần đổi vào DOM, rồi chạy effect sau paint.</desc>
+        <defs><marker id="react-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker><marker id="react-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker></defs>
+        <rect x="0" y="0" width="960" height="330" fill="#f5f5f5"/>
+        <path d="M185,150 H240" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#react-arrow)"/>
+        <path d="M410,150 H465" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#react-arrow)"/>
+        <path d="M635,150 H690" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#react-arrow)"/>
+        <path d="M790,180 V235 H675" fill="none" stroke="#bf4520" stroke-width="1.2" marker-end="url(#react-arrow-accent)"/>
+        <rect x="177" y="129" width="70" height="16" fill="#f5f5f5"/><text x="212" y="142" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">setState</text>
+        <rect x="417" y="129" width="40" height="16" fill="#f5f5f5"/><text x="437" y="142" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">diff</text>
+        <rect x="634.5" y="129" width="55" height="16" fill="#f5f5f5"/><text x="662" y="142" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">commit</text>
+        <rect x="30" y="120" width="155" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="107" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">State đổi</text>
+        <text x="107" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">useState</text>
+        <rect x="240" y="120" width="170" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="325" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Render lại</text>
+        <text x="325" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">component fn</text>
+        <rect x="465" y="120" width="170" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="550" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Diff cây</text>
+        <text x="550" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">reconciliation</text>
+        <rect x="690" y="120" width="200" height="60" rx="6" fill="#fdf0ea" stroke="#bf4520" stroke-width="1.6"/>
+        <text x="790" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">DOM được commit</text>
+        <text x="790" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">chỉ phần đổi</text>
+        <rect x="475" y="235" width="200" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="575" y="260" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">useEffect sau paint</text>
+        <text x="575" y="279" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">cleanup trước lần sau</text>
+      </svg>
+    </div><figcaption>Hình 5 · React rendering — render, diff, commit; effect chạy sau paint.</figcaption></figure>
+    <div class="card warn"><div class="card-lab">Lầm tưởng</div><ul><li><b>"Virtual DOM nhanh hơn DOM thật"</b> — nó là mô hình lập trình, không phải đảm bảo tốc độ; lợi ích là diffing cộng batching, và React thường chậm hơn cập nhật DOM viết tay.</li><li><b>"State cập nhật ngay lập tức"</b> — biến đó là snapshot của lần render.</li><li><b>"Hooks là phép thuật"</b> — chúng là linked list các hook node trên fiber (<code>memoizedState</code>), tiêu thụ theo thứ tự gọi.</li></ul></div>
+    <div class="qstory"><span class="qstory-lab">Pattern hay gặp</span><p>Một <code>useEffect</code> với dependency array rỗng đóng kín (close over) <code>count</code> ở lần đầu và luôn log ra <code>0</code>.</p></div>
+    <p><b>Hệ quả nghiệp vụ (pattern, không phải ca anh gặp):</b> state giữ số cũ trên bảng attendance hoặc màn hình lương sẽ khiến HR đọc một con số không còn đúng nữa trong kỳ payroll; kỳ lương phải chạy lại để sửa, kèm thời gian hỗ trợ truy lại màn hình nào đã nói sai.</p>
+    <p><b>Nói trong phỏng vấn:</b> "Render, diff, commit — và hooks là linked list trên mỗi fiber, tiêu thụ theo thứ tự gọi."</p>
+    <p>Video: <a href="https://www.youtube.com/watch?v=1S_V3x5v4zY" target="_blank" rel="noopener">Realigning Your Model of React After Hooks With Dan Abramov — Kent C. Dodds</a></p>
+    <h3>FastAPI: ASGI app trên Starlette, Pydantic ở biên, Uvicorn phục vụ</h3>
+    <p>FastAPI là framework trên Starlette và Pydantic; nó không phải server — Uvicorn (hoặc ASGI server khác) phục vụ nó. ASGI là interface giữa server và Python app, xây cho async. Handler <code>async def</code> chạy trên event loop; handler <code>def</code> thường chạy trong worker thread để không chặn loop. Pydantic validate request trước khi endpoint chạy và serialize response sau khi chạy; schema OpenAPI sinh từ type hints. <code>Depends()</code> resolve dependency theo từng request và cache dependency trong cùng một request, nên một DB session resolve một lần được mọi route cần nó trong request đó dùng chung. Nhìn sơ đồ dưới đây trước, rồi mới đối chiếu từng lớp với code.</p>
+    <figure><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+      <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fastapi-core-title fastapi-core-desc">
+        <title id="fastapi-core-title">Sơ đồ request của FastAPI: ASGI app, Pydantic validate, handler event loop hoặc threadpool, Pydantic serialize, response</title>
+        <desc id="fastapi-core-desc">Request vào ASGI app; Pydantic validate request trước handler; handler async chạy event loop, handler sync chạy threadpool; Pydantic serialize response rồi trả về.</desc>
+        <defs><marker id="fastapi-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker><marker id="fastapi-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker></defs>
+        <rect x="0" y="0" width="960" height="330" fill="#f5f5f5"/>
+        <path d="M180,150 H235" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fastapi-arrow)"/>
+        <path d="M405,150 H460" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fastapi-arrow)"/>
+        <path d="M640,150 H690" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fastapi-arrow)"/>
+        <path d="M690,110 H760 V95 H855" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fastapi-arrow)"/>
+        <path d="M690,200 H760 V225 H855" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fastapi-arrow)"/>
+        <rect x="701" y="74" width="48" height="16" fill="#f5f5f5"/><text x="725" y="87" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">async</text>
+        <rect x="705" y="204" width="40" height="16" fill="#f5f5f5"/><text x="725" y="217" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">sync</text>
+        <rect x="767" y="74" width="80" height="16" fill="#f5f5f5"/><text x="807" y="87" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">event loop</text>
+        <rect x="765" y="204" width="84" height="16" fill="#f5f5f5"/><text x="807" y="217" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">threadpool</text>
+        <rect x="187" y="129" width="40" height="16" fill="#f5f5f5"/><text x="207" y="142" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">ASGI</text>
+        <rect x="397" y="129" width="70" height="16" fill="#f5f5f5"/><text x="432" y="142" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">validate</text>
+        <rect x="647" y="129" width="36" height="16" fill="#f5f5f5"/><text x="665" y="142" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">chạy</text>
+        <rect x="30" y="120" width="150" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="105" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Request</text>
+        <text x="105" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">HTTP</text>
+        <rect x="235" y="120" width="170" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="320" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">ASGI app</text>
+        <text x="320" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">Starlette · FastAPI</text>
+        <rect x="460" y="120" width="180" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="550" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Pydantic validate</text>
+        <text x="550" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">request trước handler</text>
+        <rect x="690" y="80" width="120" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <rect x="690" y="170" width="120" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="750" y="104" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">event loop</text>
+        <text x="750" y="123" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">async def</text>
+        <text x="750" y="194" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">threadpool</text>
+        <text x="750" y="213" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">def (sync)</text>
+        <path d="M810,110 H855" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fastapi-arrow)"/>
+        <path d="M810,200 H855" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#fastapi-arrow)"/>
+        <rect x="855" y="120" width="85" height="60" rx="6" fill="#ffffff" stroke="#4f5d75" stroke-width="1.2"/>
+        <text x="897" y="145" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Pydantic</text>
+        <text x="897" y="164" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">serialize</text>
+        <path d="M897,180 V252" fill="none" stroke="#bf4520" stroke-width="1.2" marker-end="url(#fastapi-arrow-accent)"/>
+        <rect x="710" y="252" width="250" height="56" rx="6" fill="#fdf0ea" stroke="#bf4520" stroke-width="1.6"/>
+        <text x="835" y="276" text-anchor="middle" font-family="Geist,sans-serif" font-size="12" font-weight="600" fill="#2d3142">Response</text>
+        <text x="835" y="295" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" fill="#5a6580">Uvicorn phục vụ</text>
+      </svg>
+    </div><figcaption>Hình 6 · FastAPI request — async trên event loop, sync trên threadpool, Pydantic ở biên.</figcaption></figure>
+    <div class="card warn"><div class="card-lab">Lầm tưởng</div><ul><li><b>"FastAPI là web server"</b> — không, Uvicorn mới là server; FastAPI là lớp app/framework.</li><li><b>"async tự động nhanh hơn"</b> — nó nhanh hơn cho I/O-bound concurrency; một blocking call trong <code>async def</code> chặn toàn bộ event loop cho mọi request.</li></ul></div>
+    <div class="qstory"><span class="qstory-lab">Pattern hay gặp</span><p><code>time.sleep(2)</code> (hoặc sync DB driver) trong một route <code>async def</code>; request của một user làm mọi user khác đứng chờ.</p></div>
+    <p><b>Hệ quả nghiệp vụ (pattern, không phải ca anh gặp):</b> một lệnh chặn làm event loop đứng lại nên các request đồng thời cùng bị chậm; người dùng chờ lâu, bấm lại và tạo thêm tải, còn độ trễ tăng xuất hiện trên log per-route trước khi thành lỗi toàn hệ thống.</p>
+    <p>Video: <a href="https://www.youtube.com/watch?v=nYAMtzAbNN8" target="_blank" rel="noopener">FastAPI Internals - How does it work? - Marcelo Trylesinski — Python Italia</a></p>
+    <p>Ba cơ chế xong rồi, sang mục 04 làm luôn bản CRUD để biến cơ chế thành bằng chứng viết được.</p>
+  </section>
+
+  <!-- ============ 04 ============ -->
+  <section id="practice">
+    <div class="sec-head"><span class="sec-num">04</span><h2>Bài tập CRUD — cùng một đề, hai bản</h2></div>
+    <p>Chỉ cần bốn tiếng: GET, POST, PATCH và bộ đếm đã cho thấy bạn viết được, không chỉ đọc được.</p>
+    <p>Bài này biến "em biết Vue" thành artifact tự dựng để đưa ra nghe thấy, không phải lời hứa học nhanh. Cùng một đề, làm bản nào trước cũng được; nếu chỉ có hai giờ thì làm Vue trước vì đó là khoảng trống.</p>
+
+    <div class="card">
+      <div class="card-lab">Đề bài</div>
+      <p style="margin-bottom:8px"><b>Danh sách ứng viên.</b> Một trang gồm: bảng danh sách (tên, email, trạng thái), form thêm mới, ô tìm kiếm, và bộ đếm "đang chờ / đã duyệt" tính từ dữ liệu.</p>
+      <ul style="margin-bottom:0">
+        <li>API: <code>GET /candidates</code>, <code>POST /candidates</code>, <code>PATCH /candidates/:id</code> (đổi trạng thái).</li>
+        <li>Ba trạng thái tải: loading, error, empty — phải có đủ, không chỉ happy path.</li>
+        <li>Tìm kiếm lọc phía client trước, ghi chú rõ khi nào sẽ chuyển sang server-side.</li>
+        <li>Bộ đếm phải là giá trị dẫn xuất (computed hoặc useMemo — tự tính lại từ dữ liệu), không phải state thứ hai.</li>
+      </ul>
+    </div>
+
+    <h3>Tiêu chí đạt — bản Vue</h3>
+    <ul>
+      <li><code>&lt;script setup&gt;</code> (cú pháp viết gọn trong một file), ít nhất một <code>ref</code> (một giá trị Vue theo dõi thay đổi), một <code>computed</code> (giá trị tự tính lại khi dữ liệu đổi), một <code>watch</code> (chạy việc khi dữ liệu đổi).</li>
+      <li>Một component con nhận props và <code>emit</code> sự kiện (bắn sự kiện lên cha) (không sửa props trực tiếp).</li>
+      <li>Form dùng <code>v-model</code> (hai chiều: nhập là đổi, đổi là hiện); danh sách dùng <code>v-for</code> (lặp để render nhiều dòng) + <code>:key</code> là id thật.</li>
+      <li>Một store Pinia (<code>defineStore</code> — định nghĩa kho state dùng chung) với state/getters/actions.</li>
+      <li>Một route có param (<code>/candidates/:id</code>) và một guard (cổng chặn trước khi vào trang) chặn khi chưa "đăng nhập".</li>
+    </ul>
+
+    <h3>Tiêu chí đạt — bản React</h3>
+    <ul>
+      <li>Function component, <code>useState</code> (giữ một giá trị đổi theo lần render) + <code>useEffect</code> (chạy việc sau khi render) có cleanup (dọn việc cũ khi rời trang), cờ <code>alive</code> (biến kiểm tra thành phần còn sống) hoặc <code>AbortController</code> (cách hủy yêu cầu đang tải).</li>
+      <li><code>useMemo</code> (giữ kết quả đã tính để khỏi tính lại) cho bộ đếm, kèm giải thích vì sao cần (hoặc không cần).</li>
+      <li>Component con nhận callback qua props; không mutate props.</li>
+      <li>Route param qua <code>useParams</code> (đọc phần biến trên URL), guard bằng component bọc hoặc loader.</li>
+      <li>Store: Zustand (thư viện kho state nhẹ) hoặc Context (cách truyền dữ liệu xuống cây component) — nói rõ chọn cái nào và vì sao.</li>
+    </ul>
+
+    <div class="card warn">
+      <div class="card-lab">Cách dùng bài này trong phỏng vấn</div>
+      <p style="margin:0">Đừng nói "em đang học Vue". Nói: "Em dựng một CRUD Vue 3 + Pinia + Router để kiểm tra giả thuyết rằng phần khó của Vue với em chỉ là cú pháp. Đây là mã nguồn, đây là ba chỗ em phải tra docs." Chỉ ra được chỗ phải tra docs là dấu hiệu học thật.</p>
+    </div>
+    <p>Tự làm xong CRUD này, 147 câu ở mục 05 sẽ không còn là chữ lạ.</p>
+  </section>
+
+  <!-- ============ 05 ============ -->
+  <section id="bank">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Ngân hàng câu hỏi</h2></div>
+    <p>Mỗi câu mở ra bốn thứ bạn thật sự cần trong phòng: <b>nói 30–60 giây</b>, <b>nói 90 giây</b>,
+      <b>tình huống</b> để kể, và <b>câu hỏi xoáy</b> họ sẽ hỏi tiếp. Đánh dấu "thuộc" khi bạn nói được thành tiếng.</p>
+    <div class="bank-stat" id="bankStat"></div>
+    <input class="search" id="qsearch" type="search" placeholder="Tìm theo từ khoá, id (G15), hoặc chủ đề…" aria-label="Tìm câu hỏi">
+    <div class="filters" id="qgroups"></div>
+    <div class="filters" id="qprio"></div>
+    <div id="qlist"></div>
+
+    <h3 class="sub">Ngoài phạm vi research: 8 câu React</h3>
+    <p>Research của bạn đi theo <b>Vue</b>; React chỉ xuất hiện trong đó với vai trò so sánh ("giống <code>useState</code> trong React").
+      Tám câu này chưa được kiểm chứng như 147 câu trên, giữ lại vì CV của bạn ghi React
+      nên người phỏng vấn vẫn có thể hỏi chéo.</p>
+    <div id="qextra"></div>
+    <p>147 câu là đáp án cho câu hỏi thường gặp; sáu chuyện STAR ở mục 06 là câu chuyện thực tế đi kèm.</p>
+    <p class="note">Ghi chú bảo trì: câu được sinh từ nguồn research và sinh lại khi nguồn đó thay đổi.</p>
+    <p><b>Đây là nguyên văn research của bạn, không được rào lại bằng lời mới.</b> 147 câu, nhóm A–J, mỗi câu mang id gốc (A01, G15…) để đối chiếu từng câu.</p>
+  </section>
+
+  <!-- ============ 06 ============ -->
+  <section id="star">
+    <div class="sec-head"><span class="sec-num">06</span><h2>Sáu chuyện STAR</h2></div>
+    <p>Sáu chuyện này phủ 5 trong 7 nhóm việc JD mô tả: tính năng đầu-cuối, log và chi phí, API và test, xử lý lỗi, cơ chế lõi của một sản phẩm HRM frontend production thật. Hai nhóm chưa được phủ bởi STAR là quản trị tài nguyên AWS và Vue production — đó là khoảng trống đang tự dựng, không phải chuyện đã kể.</p>
+    <p>Sáu chuyện, mỗi chuyện 90 giây: chatbot CRM, RAG đo chi phí, thuê nhà RBAC, chấm công, thanh toán Thái Lan, Jinjer HRM frontend.</p>
+    <p>Mỗi chuyện phải nói được trong 90 giây. Bấm đồng hồ, nói thành tiếng, rồi tự chấm: có nêu <b>kết quả đo được</b> không, có nhắc <b>thứ đã thay đổi</b> không.</p>
+    <div class="timer">
+      <span class="clock" id="clock">01:30</span>
+      <button id="startTimer">Bắt đầu</button>
+      <button id="resetTimer">Đặt lại</button>
+    </div>
+    <div class="star-grid" id="starlist"></div>
+    <p>Xong sáu chuyện, rủi ro tiếp theo là hợp đồng: thứ tốn nhất ở đó thường không phải lương headline mà là căn cứ đóng BHXH.</p>
+  </section>
+
+  <!-- ============ 07 ============ -->
+  <section id="company">
+    <div class="sec-head"><span class="sec-num">07</span><h2>Công ty &amp; hợp đồng</h2></div>
+    <p>MST 0318222903 cập nhật 2026-11-06: kiểm chứng xong pháp nhân rồi mới đọc hợp đồng.</p>
+
+    <p><b>Về "tuyển ảo":</b> không có dấu hiệu. Tin có hạn nộp, có khoảng lương, và tin fullstack <b>đã đóng nhận hồ sơ</b> — quy trình thật thì có điểm kết. <b>Về phốt:</b> không tìm thấy kết quả nào gắn với Phổ Tuệ/HiTechCloud sau khi tra phốt, lừa đảo, nợ lương, layoff.</p>
+
+    <div class="card warn">
+      <div class="card-lab">Hai rủi ro, không phải phốt</div>
+      <p style="margin-bottom:8px"><b>1. Pháp nhân chưa tới 3 năm</b> nhưng tự công bố 85.000+ khách và 8 văn phòng quốc tế. Có thể là tái lập thương hiệu từ doanh nghiệp cũ (nội dung hitechcloud đã được index từ trước mốc 2023-12), cũng có thể là marketing phóng đại. Không đổi quyết định ứng tuyển, nhưng đổi mức độ kỹ khi đọc hợp đồng.</p>
+      <p style="margin:0"><b>2. Không có đánh giá nhân viên</b> trên ITviec/Glassdoor — không phải dấu hiệu xấu, nhưng nghĩa là bạn không có dữ liệu bên thứ ba; phải hỏi trực tiếp.</p>
+    </div>
+
+    <h3>Đã kiểm chứng</h3>
+    <table>
+      <tbody>
+        <tr><td>Pháp nhân</td><td>Công ty CP Giải pháp Công nghệ và Phần mềm Phổ Tuệ (Pho Tue Software Solutions JSC)</td></tr>
+        <tr><td>MST (mã số thuế)</td><td>0318222903 — đang hoạt động, dữ liệu thuế cập nhật 2026-11-06</td></tr>
+        <tr><td>Ngày hoạt động</td><td>2023-12-20</td></tr>
+        <tr><td>Trụ sở</td><td>128 Đường Bình Mỹ, Xã Bình Mỹ, TP HCM</td></tr>
+        <tr><td>Ngành chính</td><td>6190 (mã ngành đăng ký chính) Viễn thông khác; có thêm 6310 hạ tầng CNTT, 6219 lập trình, 6220 tư vấn CNTT</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Phải thấy bằng văn bản trước khi ký</h3>
+    <div id="contract"></div>
+
+    <h3>Nên hỏi họ</h3>
+    <ul id="askthem"></ul>
+    <p>Ký thì phải viết được 45 giây giới thiệu ở mục 08, không để vòng đầu mở bằng câu chung chung.</p>
+  </section>
+
+  <!-- ============ 08 ============ -->
+  <section id="intro">
+    <div class="sec-head"><span class="sec-num">08</span><h2>Nói 1–2 phút cho vòng đầu</h2></div>
+    <p>45 giây cho sàng lọc, 90 giây cho vòng kỹ thuật: mở bằng RAG đo chi phí là có số để bị đào tiếp.</p>
+    <p>Câu đầu tiên gần như chắc chắn được hỏi, và nó đặt khung cho toàn bộ buổi. Nguyên tắc của phần này: <b>1–2 phút, cụ thể, kết bằng điều học được</b>. Dưới đây là bốn nhịp, ba bản nói, và những câu sẽ bị hỏi tiếp ngay sau đó.</p>
+
+    <h3>Bốn nhịp nói 1–2 phút</h3>
+    <div id="introBeats"></div>
+
+    <h3>Bản 45 giây — dùng cho điện thoại / sàng lọc</h3>
+    <div id="introShort"></div>
+
+    <h3>Bản 90 giây — vòng kỹ thuật</h3>
+    <div id="introLong"></div>
+
+    <h3>Bản tiếng Anh, nếu phỏng vấn bằng tiếng Anh</h3>
+    <div id="introEn"></div>
+
+    <h3>Câu hỏi tiếp ngay sau phần giới thiệu</h3>
+    <div id="introFollow"></div>
+
+    <h3>Chuyện nên tránh</h3>
+    <ul id="introAvoid"></ul>
+
+    <div class="card warn">
+      <div class="card-lab">Cách luyện</div>
+      <p style="margin:0" id="introDrill"></p>
+    </div>
+    <p>Đã soạn được bản nói, mục 09 bắt bạn nói thật dưới đồng hồ trước khi vào vòng thật.</p>
+  </section>
+
+  <!-- ============ 09 ============ -->
+  <section id="mock">
+    <div class="sec-head"><span class="sec-num">09</span><h2>Mock interview</h2></div>
+    <div class="mk-callout">
+      <b>JD ghi:</b> <em>"Bạn được mời làm bài kiểm tra chuyên môn để đội ngũ hiểu rõ hơn cách bạn làm việc."</em>
+    </div>
+    <p>Bài làm 4 giờ, chấm 6 thứ: họ chấm quy trình, không chỉ kết quả.</p>
+    <p>Quy trình của công ty có <b>hai vòng kỹ thuật</b>, không phải một: vòng bài kiểm tra chuyên môn, rồi vòng
+      trao đổi với đội tuyển dụng và quản lý bộ phận. Dưới đây là cả hai, dựng theo đúng thứ tự đó.</p>
+    <div class="mk-callout">
+      <b>Vòng kiểm tra chuyên môn (JD gọi là Vòng 3)</b>
+      <p style="margin:6px 0 0">Chữ "cách bạn làm việc" là mấu chốt — họ chấm quy trình, không chỉ kết quả.</p>
+    </div>
+
+    <div class="wrgrid" id="wrForms"></div>
+
+    <h3 class="sub">Sáu thứ luôn được chấm, dù đề là dạng nào</h3>
+    <div class="wrrubric" id="wrRubric"></div>
+
+    <h3 class="sub">Nếu nhận đề lúc tối, làm trong 4 giờ</h3>
+    <div class="wrplan" id="wrPlan"></div>
+
+    <hr class="mk-sep">
+
+    <div class="mk-callout">
+      <b>Vòng 4 — Phỏng vấn trực tiếp</b>
+      <p style="margin:6px 0 0">Bấm giờ như buổi thật. Nói ra thành tiếng trước, rồi mới bấm hiện đáp án,
+        rồi tự chấm 0–3. Tự chấm là cách duy nhất biết mình đang ở đâu — đọc đáp án không phải là luyện.</p>
+    </div>
+
+    <div class="mk-phases" id="mkPhases"></div>
+
+    <div class="mk">
+      <div class="mk-top">
+        <div class="mk-timer" id="mkTimer">00:00</div>
+        <div class="mk-barwrap"><div class="mk-bar" id="mkBar"></div></div>
+      </div>
+      <div class="mk-dots" id="mkDots"></div>
+      <div class="mk-body" id="mkBody"></div>
+    </div>
+    <p>Phỏng vấn trực tiếp trong mục 09 xong, mục 10 cho thấy đề nào gần như chắc chắn sẽ tới.</p>
+  </section>
+
+  <!-- ============ 10 ============ -->
+  <section id="coverage">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Dự đoán đề</h2></div>
+    <p>Mọi dòng trong JD đều có câu hỏi phủ: mức A gần như chắc chắn sẽ tới.</p>
+
+    <div class="cov-legend">
+      <span><span class="tier tA">A</span> gần như chắc chắn — mọi buổi đều hỏi</span>
+      <span><span class="tier tB">B</span> rất cao — JD nêu đích danh hoặc ghi trong quy trình</span>
+      <span><span class="tier tC">C</span> có thể — tuỳ người phỏng vấn</span>
+    </div>
+    <div class="cov-sum" id="covSummary"></div>
+    <div class="card warn">
+      <div class="card-lab">Nói thẳng: không đoán được câu chữ</div>
+      <p style="margin:0">Không ai đoán được 100% <b>câu chữ</b>. Ba người phỏng vấn cùng một JD sẽ hỏi ba câu khác nhau.
+        Nhưng có một thứ đo được chính xác: <b>mọi dòng trong JD đều có câu hỏi phủ</b>. Hụt đề theo nghĩa lạc chủ đề
+        là thứ loại được; hụt vì diễn đạt chưa tốt thì không có bảng nào cứu được — đó là việc của mục 09.</p>
+    </div>
+
+
+    <table class="cov-table">
+      <thead><tr><th>Mức</th><th>Dòng trong JD</th><th>Câu hỏi phủ</th></tr></thead>
+      <tbody id="covTable"></tbody>
+    </table>
+    <p class="cov-note">Chấm điểm ở mục 09 thì các con số ở đây tự đổi màu: <span class="pill good">xanh</span> đã đủ ý,
+      <span class="pill weak">đỏ</span> còn yếu, <span class="pill unseen">xám</span> chưa chấm.</p>
+
+    <h3 class="sub">Bốn thứ không ai đoán được</h3>
+    <div class="unknowable" id="unknowable"></div>
+
+    <div class="card">
+      <div class="card-lab">Cách dùng bảng này đúng</div>
+      <p style="margin:0">Đừng học thuộc câu trả lời. Mỗi dòng mức A, nói ra thành tiếng 60 giây, rồi tự chấm.
+        Dòng nào chấm dưới 2 thì quay lại mục 00 (giải thích từ đầu) hoặc mục 05 (ngân hàng câu hỏi) —
+        đừng luyện lại đúng câu đó, vì lần sau họ sẽ hỏi câu khác cùng chủ đề. Sửa chỗ hiểu, không sửa câu thuộc.</p>
+    </div>
+    <p>Luyện đủ các mức A ở đây rồi, mục 11 là chỗ bạn hỏi ngược 162 vị trí kia về sản phẩm.</p>
+  </section>
+
+  <!-- ============ 11 ============ -->
+  <section id="ask">
+    <div class="sec-head"><span class="sec-num">11</span><h2>Hỏi lại họ</h2></div>
+    <p>162 vị trí đang mở, một title sáu người: không ghi domain là cách gom ứng viên, phải hỏi để biết sản phẩm.</p>
+    <p>JD không ghi domain. Đó không phải sơ suất — đó là dấu hiệu của một <b>đợt tuyển theo nhóm năng lực</b>:
+      một title, sáu người, mô tả bằng kỹ năng chứ không bằng sản phẩm. Dưới đây là suy đoán có bằng chứng,
+      rồi bộ câu hỏi để biến chỗ mơ hồ đó thành câu trả lời cụ thể trước khi bạn ký.</p>
+
+    <div class="card warn">
+      <div class="card-lab">Đọc trước khi dùng tỉ lệ</div>
+      <p style="margin:0">Tỷ lệ phần trăm bên dưới là <b>ước lượng của tôi từ thông tin công khai</b> trên site công ty,
+        trang tuyển dụng và các trang sản phẩm — không phải số liệu nội bộ, và không phải lời hứa. Dùng nó để biết
+        nên hỏi gì trước, không dùng để kết luận.</p>
+    </div>
+
+    <h3 class="sub">Suy đoán: bốn khả năng, xếp theo xác suất</h3>
+    <div class="dom-grid" id="askHyp"></div>
+
+    <h3 class="sub">Bằng chứng tôi dùng để suy đoán</h3>
+    <div class="evlist" id="askEvidence"></div>
+
+    <h3 class="sub">Bảng quyết định: họ trả lời gì thì domain là gì</h3>
+    <table class="dec-table">
+      <thead><tr><th>Câu trả lời của họ</th><th>Kết luận</th><th>Làm gì tiếp</th></tr></thead>
+      <tbody id="askDecision"></tbody>
+    </table>
+
+    <hr class="mk-sep">
+
+    <h3 class="sub">Bộ câu hỏi để hỏi lại <span class="ask-cnt" id="askCount"></span></h3>
+    <p>Hỏi theo thứ tự này. Mỗi câu có <em>hỏi để làm gì</em>, một câu trả lời <em>tốt</em> trông thế nào,
+      và một câu trả lời phải <em>cảnh giác</em>. Không cần hỏi hết — chọn 8–10 câu, ưu tiên nhóm 1 và nhóm 5.</p>
+    <div class="ask-groups" id="askGroups"></div>
+
+    <h3 class="sub">Bảng tra nhanh: dấu hiệu phải dừng</h3>
+    <table class="dec-table">
+      <thead><tr><th>Dấu hiệu</th><th>Họ thường nói</th><th>Bạn làm gì</th></tr></thead>
+      <tbody id="askRed"></tbody>
+    </table>
+
+    <div class="card">
+      <div class="card-lab">Ba điều nên biết trước khi vào phòng</div>
+      <p style="margin:0 0 8px"><b>1. Không ghi domain là bình thường</b> (xem đoạn mở đầu mục này). Cờ đỏ thật là <em>không trả lời được</em> khi bạn hỏi cụ thể, chứ không phải việc JD thiếu domain.</p>
+      <p style="margin:0 0 8px"><b>2. Thử việc 2 tháng hưởng 100% là điểm tốt.</b> Theo Bộ luật Lao động 2019,
+        thử việc tối đa 60 ngày với công việc cần trình độ cao đẳng trở lên, lương thử việc tối thiểu 85%.
+        Họ đang trả trên mức sàn — nhưng vẫn phải có hợp đồng thử việc bằng văn bản.</p>
+      <p style="margin:0"><b>3. Chỗ dễ mất tiền nhất không phải lương, mà là mức đóng BHXH.</b> Lương thoả thuận là
+        "thực nhận" nghĩa là con số bạn thấy là con số bạn tiêu. Nhưng nếu BHXH đóng trên mức tối thiểu vùng thay vì
+        lương thật, bạn mất dần quyền lợi dài hạn — lương hưu, ốm đau, thai sản. Đây là câu phải hỏi bằng số.</p>
+    </div>
+    <p>Trước khi ký, hãy bắt họ trả lời bằng số: BHXH đóng trên lương thật hay mức tối thiểu vùng.</p>
+  </section>
+
+  <footer>
+    Nguồn: JD + 3 CV trong <code>documents/</code> · tài liệu chuẩn bị cùng thư mục · dữ liệu pháp lý từ masothue (MST 0318222903).<br>
+    Cập nhật 2026-11-07 · nội dung học trong <code>study/data.js</code> · mock interview + dự đoán đề trong <code>study/mock.js</code> · hỏi lại nhà tuyển dụng trong <code>study/ask.js</code> · không sửa file này.
+  </footer>
+</main>
+</div>
+
+<script src="data.js"></script>
+<script src="bank.js"></script>
+<script src="mock.js"></script>
+<script src="ask.js"></script>
+<script>
+(function () {
+  var P = window.PREP;
+  var LSS = 'hcp-sched-v1';
+  var LSO = 'hcp-known-v1';
+  var IV = { 1: 0, 2: 1, 3: 3, 4: 7, 5: 16 };
+  var sched = {};
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function persist() { lsSet(LSS, JSON.stringify(sched)); }
+  function isKnown(id) { return !!(sched[id] && sched[id].lvl >= 3); }
+  function dueNow() {
+    var t = Date.now();
+    return Object.keys(sched).filter(function (id) { return sched[id] && sched[id].due <= t; }).length;
+  }
+  function migrate() {
+    var rawNew = lsGet(LSS);
+    if (rawNew) {
+      try {
+        var v = JSON.parse(rawNew);
+        if (v && typeof v === 'object' && !Array.isArray(v)) sched = v;
+      } catch (e) { sched = {}; }
+      return;
+    }
+    var rawOld = lsGet(LSO);
+    if (!rawOld) return;
+    try {
+      var old = JSON.parse(rawOld);
+      if (old && typeof old === 'object' && !Array.isArray(old)) {
+        Object.keys(old).forEach(function (id) {
+          if (old[id] === true) sched[id] = { lvl: 3, due: Date.now() };
+        });
+      }
+    } catch (e) { sched = {}; }
+    persist();
+  }
+  migrate();
+
+  /* ---------- concepts ---------- */
+  var cw = document.getElementById('concepts');
+  P.concepts.forEach(function (c, i) {
+    var wrap = document.createElement('div');
+    wrap.className = 'concept';
+
+    var h = document.createElement('h3');
+    h.textContent = c.title;
+    wrap.appendChild(h);
+
+    var tabs = document.createElement('div');
+    tabs.className = 'tabs';
+    tabs.setAttribute('role', 'tablist');
+    var pane = document.createElement('div');
+    pane.className = 'pane';
+    var pre = document.createElement('pre');
+    var code = document.createElement('code');
+    pre.appendChild(code);
+    pane.appendChild(pre);
+
+    var btn = document.createElement('button');
+    btn.className = 'copy';
+    btn.type = 'button';
+    btn.textContent = 'copy';
+    btn.addEventListener('click', function () {
+      navigator.clipboard.writeText(code.textContent).then(function () {
+        btn.textContent = 'đã copy';
+        setTimeout(function () { btn.textContent = 'copy'; }, 1200);
+      });
+    });
+    pane.appendChild(btn);
+
+    var order = [['Vue 3', c.vue], ['React', c.react]];
+    order.forEach(function (pair, idx) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.textContent = pair[0];
+      b.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
+      b.addEventListener('click', function () {
+        tabs.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-selected', 'false'); });
+        b.setAttribute('aria-selected', 'true');
+        code.textContent = pair[1];
+      });
+      tabs.appendChild(b);
+    });
+
+    code.textContent = c.vue;
+    wrap.appendChild(tabs);
+    wrap.appendChild(pane);
+
+    var note = document.createElement('p');
+    note.className = 'note';
+    note.innerHTML = c.note;
+    wrap.appendChild(note);
+
+    cw.appendChild(wrap);
+  });
+
+  /* ---------- questions (sinh từ research, xem build-bank.mjs) ---------- */
+  var B = window.BANK;
+  var TYPE_LABEL = {
+    concept: 'khái niệm',
+    debug: 'gỡ lỗi',
+    predict: 'đoán kết quả',
+    code: 'viết code',
+    situation: 'tình huống'
+  };
+  var activeGroup = 'all';
+  var activePrio = 'all';
+  var term = '';
+  var sessionIds = [];
+  var activeMix = false;
+  var filters = document.getElementById('qgroups');
+  var pfilters = document.getElementById('qprio');
+  var list = document.getElementById('qlist');
+
+  function chip(label, active, onPick, data) {
+    var b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.textContent = label;
+    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+    if (data) b.dataset.k = data;
+    b.addEventListener('click', onPick);
+    return b;
+  }
+
+  if (B) {
+    var gAll = chip('Tất cả · ' + B.total, true, function () {
+      activeGroup = 'all';
+      filters.querySelectorAll('.chip').forEach(function (x) {
+        x.setAttribute('aria-pressed', x.dataset.k === 'all' ? 'true' : 'false');
+      });
+      renderQ();
+    }, 'all');
+    filters.appendChild(gAll);
+    Object.keys(B.groups).forEach(function (g) {
+      var c = B.count[g] || { total: 0 };
+      filters.appendChild(chip(g + ' ' + B.groups[g].name + ' · ' + c.total, false, function () {
+        activeGroup = g;
+        filters.querySelectorAll('.chip').forEach(function (x) {
+          x.setAttribute('aria-pressed', x.dataset.k === g ? 'true' : 'false');
+        });
+        renderQ();
+      }, g));
+    });
+    filters.appendChild(chip('Trộn loại', false, function () {
+      activeMix = !activeMix;
+      filters.querySelectorAll('.chip').forEach(function (x) { if (x.dataset.k === '__mix') x.setAttribute('aria-pressed', activeMix ? 'true' : 'false'); });
+      renderQ();
+    }, '__mix'));
+
+    [['all', 'Mọi mức'], ['P0', 'P0 · chắc chắn hỏi'], ['P1', 'P1'], ['P2', 'P2']].forEach(function (p) {
+      pfilters.appendChild(chip(p[1], p[0] === 'all', function () {
+        activePrio = p[0];
+        pfilters.querySelectorAll('.chip').forEach(function (x) {
+          x.setAttribute('aria-pressed', x.dataset.k === activePrio ? 'true' : 'false');
+        });
+        renderQ();
+      }, p[0]));
+    });
+  }
+
+  document.getElementById('qsearch').addEventListener('input', function (e) {
+    term = e.target.value.trim().toLowerCase();
+    renderQ();
+  });
+  function setScore(qid, n) {
+    sched[qid] = { lvl: n, due: Date.now() + (IV[n] || 0) * 86400000 };
+    persist();
+    updateProgress();
+    updateBankStat();
+  }
+
+  function teaserText(q) {
+    if (!q.incident) return '';
+    var tmp2 = document.createElement('div');
+    tmp2.innerHTML = q.incident;
+    var raw = (tmp2.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!raw) return '';
+    if (raw.length <= 64) return raw;
+    var cut = raw.lastIndexOf(' ', 64);
+    if (cut < 1) cut = 64;
+    return raw.slice(0, cut).replace(/[,;\s]+$/, '') + '…';
+  }
+
+  function el(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html !== undefined) n.innerHTML = html;
+    return n;
+  }
+
+  function block(title, html) {
+    if (!html) return null;
+    var wrap = el('div', 'qblock');
+    wrap.appendChild(el('div', 'qblock-lab', title));
+    wrap.appendChild(el('div', 'qblock-body', html));
+    return wrap;
+  }
+  function qMatches(q) {
+    if (sessionIds.length && sessionIds.indexOf(q.id) === -1) return false;
+    if (activeGroup !== 'all' && q.group !== activeGroup) return false;
+    if (activePrio !== 'all' && q.prio !== activePrio) return false;
+    var hay = (q.id + ' ' + q.topic + ' ' + q.q + ' ' + (q.say30 || '') + ' ' + (q.pitfalls || []).join(' ')).toLowerCase();
+    return !term || hay.indexOf(term) !== -1;
+  }
+
+  function orderedQuestions() {
+    var matching = B.questions.filter(qMatches);
+    if (!activeMix) return matching;
+    var types = ['concept', 'debug', 'predict', 'code', 'situation'];
+    var pools = {};
+    types.forEach(function (t) { pools[t] = []; });
+    matching.forEach(function (q) { if (!pools[q.type]) pools[q.type] = []; pools[q.type].push(q); });
+    var out = [], any = true;
+    while (any) {
+      any = false;
+      types.forEach(function (t) {
+        if (pools[t].length) { out.push(pools[t].shift()); any = true; }
+      });
+    }
+    return out;
+  }
+
+  function renderQ() {
+    if (!B) {
+      list.appendChild(el('p', null, 'Không tải được <code>bank.js</code>. Chạy <code>node build-bank.mjs</code> trong thư mục <code>study/</code>.'));
+      return;
+    }
+    list.innerHTML = '';
+    var shown = 0, knownCount = 0;
+
+    orderedQuestions().forEach(function (q) {
+      shown++;
+      if (isKnown(q.id)) knownCount++;
+
+      var d = el('details', 'q qb');
+
+      var s = document.createElement('summary');
+      s.appendChild(el('span', 'qid', q.id));
+      s.appendChild(el('span', 'qtopic', q.topic));
+      var tea = teaserText(q);
+      if (tea) s.appendChild(el('span', 'qteaser', tea));
+      var meta = el('span', 'qmeta');
+      meta.appendChild(el('span', 'prio prio-' + q.prio, q.prio));
+      meta.appendChild(el('span', 'lvl', q.level));
+      if (TYPE_LABEL[q.type]) meta.appendChild(el('span', 'qtype', TYPE_LABEL[q.type]));
+      s.appendChild(meta);
+
+      var kn = document.createElement('button');
+      kn.className = 'known';
+      kn.type = 'button';
+      kn.textContent = 'thuộc';
+      kn.setAttribute('aria-pressed', isKnown(q.id) ? 'true' : 'false');
+      kn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (isKnown(q.id)) { delete sched[q.id]; } else { sched[q.id] = { lvl: 3, due: Date.now() + (IV[3] || 0) * 86400000 }; }
+        persist();
+        kn.setAttribute('aria-pressed', isKnown(q.id) ? 'true' : 'false');
+        updateProgress();
+        updateBankStat();
+      });
+      s.appendChild(kn);
+      d.appendChild(s);
+
+      var body = el('div', 'body');
+      var qline = el('div', 'qask', '<b>Câu hỏi:</b> ' + q.q);
+      body.appendChild(qline);
+
+      /* Turn A, Item 2: incident first as narrative (pretest context) */
+      if (q.incident) {
+        var story = el('div', 'qstory');
+        story.appendChild(el('span', 'qstory-lab', 'Tình huống luyện tập'));
+        story.appendChild(el('div', 'qstory-body', q.incident));
+        body.appendChild(story);
+      }
+
+      if (q.anchor) body.appendChild(el('div', 'anchor', '<b>Một câu để nhớ</b>' + q.anchor));
+
+      var teach = document.createElement('button');
+      teach.className = 'teach-btn';
+      teach.type = 'button';
+      teach.textContent = 'Dạy lại 90 giây';
+      teach.addEventListener('click', function () {
+        if (teach._t) { clearInterval(teach._t); teach._t = null; teach.textContent = 'Dạy lại 90 giây'; return; }
+        var left = 90;
+        teach.textContent = '1:30 …';
+        teach._t = setInterval(function () {
+          left--;
+          if (left <= 0) { clearInterval(teach._t); teach._t = null; teach.textContent = 'hết 90 giây'; return; }
+          teach.textContent = Math.floor(left / 60) + ':' + (left % 60 < 10 ? '0' : '') + (left % 60) + ' …';
+        }, 1000);
+      });
+      body.appendChild(teach);
+
+      /* Turn A, Item 1: answers gated behind explicit commitment */
+      var gate = el('div', 'qgate');
+      gate.setAttribute('hidden', '');
+
+      var b30 = block('Nói 30–60 giây', q.say30 && '<p>' + q.say30 + '</p>');
+      if (b30) gate.appendChild(b30);
+      var b90 = block('Nói 90 giây', q.say90 && '<p>' + q.say90.replace(/\n/g, '</p><p>') + '</p>');
+      if (b90) gate.appendChild(b90);
+      var bRoot = block('Nguyên nhân gốc', q.rootCause);
+      if (bRoot) gate.appendChild(bRoot);
+
+      if (q.pitfalls && q.pitfalls.length) {
+        var t = el('div', 'trap', '<b>Bẫy:</b> ' + q.pitfalls.join(' · '));
+        gate.appendChild(t);
+      }
+
+      var probes = (q.attacks || []).concat(q.followups || []);
+      if (probes.length) {
+        var pv = el('div', 'qblock');
+        pv.appendChild(el('div', 'qblock-lab', 'Họ sẽ hỏi tiếp (' + probes.length + ')'));
+        var pb = el('div', 'qblock-body');
+        probes.forEach(function (p) {
+          var det = el('details', 'probe');
+          var ps = document.createElement('summary');
+          ps.innerHTML = p.q;
+          det.appendChild(ps);
+          det.appendChild(el('div', 'probe-a', p.a));
+          pb.appendChild(det);
+        });
+        pv.appendChild(pb);
+        gate.appendChild(pv);
+      }
+
+      if (q.selfcheck && q.selfcheck.length) {
+        gate.appendChild(block('Tự kiểm', '<ul><li>' + q.selfcheck.join('</li><li>') + '</li></ul>'));
+      }
+      if (q.refs && q.refs.length) {
+        gate.appendChild(block('Nguồn tham chiếu', '<code>' + q.refs.join('</code> · <code>') + '</code>'));
+      }
+
+      var reveal = document.createElement('button');
+      reveal.className = 'reveal-btn';
+      reveal.type = 'button';
+      reveal.textContent = 'Tôi đã nói xong — hiện đáp án';
+      reveal.addEventListener('click', function () {
+        gate.removeAttribute('hidden');
+        reveal.disabled = true;
+        reveal.style.display = 'none';
+        var row = el('div', 'selfscore');
+        row.setAttribute('role', 'group');
+        row.setAttribute('aria-label', 'Tự chấm điểm ' + q.id);
+        var probeCount = probes.length;
+        row.appendChild(el('span', 'sc-hint', 'tự chấm: 1 = không nói được · 5 = nói trôi chảy' + (probeCount ? ' · ' + probeCount + ' câu xoáy' : '')));
+        for (var sc = 1; sc <= 5; sc++) {
+          (function (n) {
+            var sb = document.createElement('button');
+            sb.className = 'sc';
+            sb.type = 'button';
+            sb.textContent = String(n);
+            sb.setAttribute('aria-pressed', 'false');
+            sb.addEventListener('click', function () {
+              row.querySelectorAll('.sc').forEach(function (x) { x.classList.remove('on'); x.setAttribute('aria-pressed', 'false'); });
+              sb.classList.add('on');
+              sb.setAttribute('aria-pressed', 'true');
+              setScore(q.id, n);
+            });
+            row.appendChild(sb);
+          })(sc);
+        }
+        body.appendChild(row);
+      });
+      body.appendChild(reveal);
+      body.appendChild(gate);
+
+      d.appendChild(body);
+      list.appendChild(d);
+    });
+
+    if (!shown) {
+      list.appendChild(el('p', null, 'Không có câu nào khớp.'));
+    }
+    updateBankStat();
+  }
+
+  function updateBankStat() {
+    var stat = document.getElementById('bankStat');
+    if (!stat || !B) return;
+    var total = B.total;
+    var shown = B.questions.filter(function (q) {
+      if (activeGroup !== 'all' && q.group !== activeGroup) return false;
+      if (activePrio !== 'all' && q.prio !== activePrio) return false;
+      var hay = (q.id + ' ' + q.topic + ' ' + q.q + ' ' + (q.say30 || '') + ' ' + (q.pitfalls || []).join(' ')).toLowerCase();
+      return !term || hay.indexOf(term) !== -1;
+    }).length;
+    var knownAll = B.questions.filter(function (q) { return isKnown(q.id); }).length;
+    var p0 = B.questions.filter(function (q) { return q.prio === 'P0'; });
+    var p0Known = p0.filter(function (q) { return isKnown(q.id); }).length;
+    stat.innerHTML =
+      '<span><b>' + shown + '</b> câu đang hiện</span>' +
+      '<span>đã thuộc <b>' + knownAll + '/' + total + '</b></span>' +
+      '<span><b class="prio prio-P0">P0</b> đã thuộc <b>' + p0Known + '/' + p0.length + '</b></span>' +
+      '<span class="muted">nguồn: ' + B.source + ' · sinh ' + B.generated + '</span>';
+  }
+  renderQ();
+  var itEl = document.getElementById('ifthenInput');
+  if (itEl) {
+    try { var it0 = localStorage.getItem('hcp-ifthen-v1'); if (it0) itEl.value = it0; } catch (e) {}
+    itEl.addEventListener('input', function () { try { localStorage.setItem('hcp-ifthen-v1', itEl.value); } catch (e) {} });
+  }
+
+  function pickSessionIds() {
+    var now = Date.now(), chosen = [], seen = {};
+    function add(q) { if (chosen.length < 12 && !seen[q.id]) { seen[q.id] = true; chosen.push(q.id); } }
+    B.questions.filter(function (q) { return sched[q.id] && sched[q.id].due <= now; })
+      .sort(function (a, b) { return (sched[a.id].lvl || 1) - (sched[b.id].lvl || 1); })
+      .forEach(add);
+    B.questions.forEach(function (q) { if (q.prio === 'P0') add(q); });
+    B.questions.forEach(add);
+    var types = ['concept', 'debug', 'predict', 'code', 'situation'], pools = {};
+    types.forEach(function (t) { pools[t] = []; });
+    chosen.forEach(function (id) {
+      var q = B.questions.find(function (x) { return x.id === id; });
+      if (q) (pools[q.type] || (pools[q.type] = [])).push(id);
+    });
+    var out = [], any = true;
+    while (any) { any = false; types.forEach(function (t) { if (pools[t].length) { out.push(pools[t].shift()); any = true; } }); }
+    return out;
+  }
+
+  var sessionTimer = null;
+  function endSession() {
+    if (sessionTimer) { clearInterval(sessionTimer); sessionTimer = null; }
+    sessionIds = [];
+    var c = document.getElementById('sessionClock'), b = document.getElementById('sessionStart');
+    if (c) { c.hidden = true; c.textContent = ''; }
+    if (b) b.textContent = 'Bắt đầu';
+    renderQ();
+  }
+
+  (function wireSession() {
+    var btn = document.getElementById('sessionStart');
+    if (!btn || !B) return;
+    btn.addEventListener('click', function () {
+      if (sessionTimer) { endSession(); return; }
+      sessionIds = pickSessionIds();
+      var clock = document.getElementById('sessionClock');
+      var left = 1200;
+      if (clock) { clock.hidden = false; clock.textContent = '20:00'; }
+      btn.textContent = 'Kết thúc';
+      renderQ();
+      sessionTimer = setInterval(function () {
+        left--;
+        if (left <= 0) { endSession(); return; }
+        if (clock) clock.textContent = Math.floor(left / 60) + ':' + (left % 60 < 10 ? '0' : '') + (left % 60);
+      }, 1000);
+    });
+  })();
+
+  /* ---------- appendix: câu ngoài research (React) ---------- */
+  (function renderExtra() {
+    var host = document.getElementById('qextra');
+    if (!host) return;
+    var extra = (P.questions || []).filter(function (q) { return q.t === 'react'; });
+    extra.forEach(function (q) {
+      var d = el('details', 'q');
+      var s = document.createElement('summary');
+      s.appendChild(el('span', 'qtopic', q.q));
+      var tag = el('span', 'qmeta');
+      tag.appendChild(el('span', 'prio prio-P2', 'ngoài'));
+      s.appendChild(tag);
+      d.appendChild(s);
+      var body = el('div', 'body');
+      body.appendChild(el('p', null, q.a));
+      if (q.trap) body.appendChild(el('div', 'trap', '<b>Bẫy:</b> ' + q.trap));
+      d.appendChild(body);
+      host.appendChild(d);
+    });
+  })();
+
+  /* ---------- star ---------- */
+  var sl = document.getElementById('starlist');
+  P.star.forEach(function (s) {
+    var d = document.createElement('div');
+    d.className = 'star';
+    var h = document.createElement('h3');
+    h.textContent = s.title;
+    d.appendChild(h);
+    var sv = document.createElement('div');
+    sv.className = 'serves';
+    sv.textContent = s.serves;
+    d.appendChild(sv);
+    var dl = document.createElement('dl');
+    [['S', s.s], ['T', s.t], ['A', s.a], ['R', s.r]].forEach(function (row) {
+      var dt = document.createElement('dt'); dt.textContent = row[0];
+      var dd = document.createElement('dd'); dd.textContent = row[1];
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+    d.appendChild(dl);
+    sl.appendChild(d);
+  });
+
+  /* ---------- timer ---------- */
+  var clock = document.getElementById('clock');
+  var left = 90, tick = null;
+  function paint() {
+    var m = Math.floor(left / 60), s = left % 60;
+    clock.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    clock.style.color = left <= 10 ? 'var(--accent)' : 'var(--ink)';
+  }
+  document.getElementById('startTimer').addEventListener('click', function () {
+    if (tick) { clearInterval(tick); tick = null; this.textContent = 'Bắt đầu'; return; }
+    this.textContent = 'Dừng';
+    tick = setInterval(function () {
+      left--;
+      paint();
+      if (left <= 0) { clearInterval(tick); tick = null; document.getElementById('startTimer').textContent = 'Bắt đầu'; }
+    }, 1000);
+  });
+  document.getElementById('resetTimer').addEventListener('click', function () {
+    if (tick) { clearInterval(tick); tick = null; document.getElementById('startTimer').textContent = 'Bắt đầu'; }
+    left = 90; paint();
+  });
+
+  /* ---------- contract + ask ---------- */
+  var ctn = document.getElementById('contract');
+  P.contract.forEach(function (row) {
+    var d = document.createElement('div');
+    d.className = 'check';
+    var lb = document.createElement('label');
+    var b = document.createElement('b');
+    b.textContent = row[0];
+    lb.appendChild(b);
+    lb.appendChild(document.createTextNode(row[1]));
+    d.appendChild(lb);
+    ctn.appendChild(d);
+  });
+  var at = document.getElementById('askthem');
+  P.askThem.forEach(function (q) {
+    var li = document.createElement('li');
+    li.textContent = q;
+    at.appendChild(li);
+  });
+
+  /* ---------- basics ---------- */
+  function trimWhy(s) {
+    var t = s.replace(/^Vì sao[^:]*:\s*/, '');
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+
+  var bg = document.getElementById('basicsGrid');
+  P.basics.forEach(function (b) {
+    var d = document.createElement('div');
+    d.className = 'basic';
+    var h = document.createElement('h3');
+    h.textContent = b.t;
+    d.appendChild(h);
+
+    [
+      ['Ví von', b.a, 'analogy'],
+      ['Thực tế', b.p, 'plain'],
+      ['Vì sao', trimWhy(b.w), 'why'],
+      ['Nói ra', b.l, 'line']
+    ].forEach(function (r) {
+      var row = document.createElement('div');
+      row.className = 'brow ' + r[2];
+      var lab = document.createElement('span');
+      lab.className = 'blab';
+      lab.textContent = r[0];
+      var val = document.createElement('p');
+      val.textContent = r[1];
+      row.appendChild(lab);
+      row.appendChild(val);
+      d.appendChild(row);
+    });
+    bg.appendChild(d);
+  });
+
+  /* ---------- intro ---------- */
+  function scriptBlock(text) {
+    var wrap = document.createElement('div');
+    wrap.className = 'script';
+    var pre = document.createElement('div');
+    pre.className = 'script-text';
+    pre.textContent = text;
+    var btn = document.createElement('button');
+    btn.className = 'copy in';
+    btn.type = 'button';
+    btn.textContent = 'copy';
+    btn.addEventListener('click', function () {
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = 'đã copy';
+        setTimeout(function () { btn.textContent = 'copy'; }, 1200);
+      });
+    });
+    wrap.appendChild(pre);
+    wrap.appendChild(btn);
+    return wrap;
+  }
+
+  var IB = document.getElementById('introBeats');
+  P.intro.structure.forEach(function (b) {
+    var row = document.createElement('div');
+    row.className = 'beat';
+    var head = document.createElement('div');
+    head.className = 'beat-head';
+    head.innerHTML = '<span class="beat-n">' + b.beat + '</span><b>' + b.name + '</b><span class="beat-t">' + b.secs + '</span>';
+    row.appendChild(head);
+    var why = document.createElement('p');
+    why.className = 'beat-why';
+    why.textContent = b.why;
+    row.appendChild(why);
+    var say = document.createElement('p');
+    say.className = 'beat-say';
+    say.textContent = '"' + b.say + '"';
+    row.appendChild(say);
+    IB.appendChild(row);
+  });
+
+  document.getElementById('introShort').appendChild(scriptBlock(P.intro.vn45));
+  document.getElementById('introLong').appendChild(scriptBlock(P.intro.vn90));
+  document.getElementById('introEn').appendChild(scriptBlock(P.intro.en));
+
+  var IF = document.getElementById('introFollow');
+  P.intro.followups.forEach(function (f) {
+    var d = document.createElement('details');
+    d.className = 'q';
+    var s = document.createElement('summary');
+    var sp = document.createElement('span');
+    sp.textContent = f.q;
+    s.appendChild(sp);
+    d.appendChild(s);
+    var body = document.createElement('div');
+    body.className = 'body';
+    var p = document.createElement('p');
+    p.textContent = f.a;
+    body.appendChild(p);
+    d.appendChild(body);
+    IF.appendChild(d);
+  });
+
+  var IA = document.getElementById('introAvoid');
+  P.intro.avoid.forEach(function (t) {
+    var li = document.createElement('li');
+    li.textContent = t;
+    IA.appendChild(li);
+  });
+  document.getElementById('introDrill').textContent = P.intro.drill;
+
+  /* ---------- progress ---------- */
+  function updateProgress() {
+    var src = B ? B.questions : P.questions;
+    var total = src.length;
+    var due = dueNow();
+    var mastered = src.filter(function (q) { return isKnown(B ? q.id : q.q); }).length;
+    document.getElementById('pcount').textContent = mastered + '/' + total;
+    document.getElementById('pbar').style.width = (total ? (mastered / total * 100) : 0) + '%';
+    var line = document.getElementById('psum');
+    if (!line) {
+      line = document.createElement('div');
+      line.id = 'psum';
+      var wrap = document.querySelector('.progress-wrap');
+      if (wrap) wrap.appendChild(line);
+    }
+    if (line) line.textContent = 'đến hạn hôm nay · ' + due + ' thẻ';
+  }
+  updateProgress();
+
+  /* ---------- nav active state ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (a, i) { a.classList.toggle('active', secs[i] === en.target); });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    secs.forEach(function (s) { if (s) io.observe(s); });
+  }
+  /* mock interview + coverage ledger (mock.js) */
+  if (window.MOCK) window.MOCK.render();
+  /* due diligence (ask.js) */
+  if (window.ASK) window.ASK.render();
+})();
+</script>
+</body>
+</html>
