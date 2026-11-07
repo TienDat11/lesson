@@ -59,7 +59,7 @@ td:first-child{font-weight:500}
 .card .card-lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
 .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
-@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}.nav{flex-direction:row;flex-wrap:nowrap;overflow-x:auto}main{padding:28px 20px 64px}.grid2{grid-template-columns:1fr}}
+@media(max-width:900px){.app{grid-template-columns:minmax(0,1fr)}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}.nav{flex-direction:row;flex-wrap:nowrap;overflow-x:auto}main{padding:28px 20px 64px}.grid2{grid-template-columns:1fr}}
 /* ---------- diagrams ---------- */
 figure{margin:20px 0 24px}
 .diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--paper);padding:8px 0}
@@ -338,9 +338,19 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
   .card .card-lab{font-size:12.5px}
   code{font-size:14px}
   .sec-num{font-size:13px}
-  .diagram-container{width:100%!important;max-width:100%!important;overflow-x:auto}
-  .diagram-container svg{max-width:100%!important;height:auto;min-width:0!important}
+  .diagram-container{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+  .diagram-container svg{width:960px!important;min-width:960px;max-width:none!important;height:auto}
   .diagram-container svg text{font-size:12px}
+  .dg-hint{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);display:block;margin:6px 0 8px}
+  .tbl-scroll{max-width:100%}
+  .tbl-scroll table{min-width:0;width:100%}
+  .tbl-scroll thead{display:none}
+  .tbl-scroll tbody{display:block}
+  .tbl-scroll tr{display:block;padding:10px 0;border-top:1px solid var(--rule)}
+  .tbl-scroll tr:first-child{border-top:2px solid var(--ink)}
+  .tbl-scroll td{display:block;border:none;padding:2px 0;min-width:0;overflow-wrap:anywhere;word-break:break-word;white-space:normal}
+  .tbl-scroll td:first-child{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ink)}
+  .tbl-scroll td:not(:first-child):not(:last-child){color:var(--muted)}
   .teach-btn{min-height:44px}
   .reveal-btn{min-height:44px}
   .chip{min-width:44px;min-height:44px}
@@ -362,12 +372,68 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
   section{border-top:1px solid var(--rule);padding-top:18px}
   section:first-of-type{border-top:none;padding-top:0}
   .mob-progress{display:block}
+  .pane,.pane pre{overflow-x:auto;max-width:100%}
+  .concept{overflow-wrap:anywhere;word-break:break-word}
+  .ifthen input{max-width:100%}
+  code{overflow-wrap:anywhere;word-break:break-word}
+  .card{overflow-wrap:anywhere;word-break:break-word;max-width:100%}
+  table{overflow-wrap:anywhere;word-break:break-word}
+  .bank-wrap>summary{overflow-wrap:anywhere;word-break:break-word;min-width:0}
+  .bank-wrap>.bank-payoff{overflow-wrap:anywhere;word-break:break-word;min-width:0}
+  .mob-progress .mob-lab{overflow-wrap:anywhere;word-break:break-word;white-space:normal}
+  details.q,details.q .body,.qblock-body{overflow-wrap:anywhere;word-break:break-word;min-width:0;max-width:100%}
+  .qteaser{white-space:normal}
+  pre{overflow-x:auto;max-width:100%}
+  .pane pre{overflow-x:auto;white-space:pre;max-width:100%}
+  .pane pre{white-space:pre-wrap;word-break:break-word;overflow-x:hidden}
+  .pane pre code{display:block;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+  .concept .pane{overflow-x:auto;min-width:0}
+  .ifthen input{width:100%;box-sizing:border-box;display:block}
+  .nav{flex-wrap:wrap;overflow-x:visible}
+  details.q .body{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+  .ifthen input{width:100%;max-width:100%;box-sizing:border-box;padding-left:8px;padding-right:8px}
+  .ifthen input{font-size:14px}
+  .ifthen input{overflow:hidden;white-space:nowrap;max-width:100%;width:100%;box-sizing:border-box}
+  .ifthen input::-webkit-input-placeholder{white-space:nowrap}
+  .ifthen input{font-size:12px}
+  .ifthen input{font-size:12px;letter-spacing:0;padding:9px 6px}
+  .ifthen input{font-size:10px;overflow:clip;contain:inline-size}
+  .ifthen input::-webkit-input-placeholder{white-space:nowrap;overflow:visible}
+  input,textarea,select{max-width:100%}
+  .nav{width:auto;max-width:100%;overflow-x:auto}
+  .pane{overflow-x:auto;max-width:100%;min-width:0}
+  .ifthen input{width:100%;max-width:100%;box-sizing:border-box}
+  .concept{max-width:100%;min-width:0}
+  .star,.card,.basic{max-width:100%;min-width:0;overflow-wrap:anywhere;word-break:break-word}
+  .mob-progress{max-width:100%}
+  .ifthen input{width:100%;box-sizing:border-box}
+  .nav{max-width:100%}
+  details.q .body{max-width:100%}
+  .bank-wrap>summary{white-space:normal}
+  .mob-progress .mob-lab{white-space:normal;max-width:100%}
+  pre{white-space:pre-wrap;word-break:break-word}
+
+  .diagram-container svg{width:960px;min-width:960px;max-width:none;height:auto}
 }
 @media(max-width:900px) and (prefers-reduced-motion:reduce){.mob-progress{display:none!important}}
 .mob-progress{display:none;position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--rule)}
 .mob-progress .mob-bar{height:3px;background:var(--rule)}
 .mob-progress .mob-fill{height:100%;width:0;background:var(--accent)}
 .mob-progress .mob-lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);padding:4px 16px 6px;display:block}
+@media(max-width:900px){
+  .toc-summary{min-height:44px;display:flex;align-items:center;padding:10px 14px;cursor:pointer;font-size:15px;font-weight:600;color:var(--ink);list-style:none}
+  .toc-summary::-webkit-details-marker{display:none}
+  .toc-summary::after{content:"▸";margin-left:auto;font-size:18px;color:var(--accent)}
+  .toc-details[open] .toc-summary::after{content:"▾"}
+  .toc-details,.toc-details>nav{margin:0}
+  .toc-details .nav{display:flex;flex-direction:column;flex-wrap:nowrap;overflow:visible;gap:0;padding:6px 0 8px}
+  .toc-details .nav a{display:flex;align-items:center;min-height:44px;padding:8px 14px;border:none;white-space:normal;overflow-wrap:anywhere}
+  .toc-details .nav a .num,.toc-details .nav a .sec-num{margin-right:10px}
+  details.toc-details{border:1px solid var(--rule);border-radius:6px;background:var(--card);margin:0 14px 10px}
+  .side .brand{padding:10px 14px 6px}
+  .side .progress-wrap{padding:8px 14px 12px;border:none}
+  .side{padding-bottom:0}
+}
 </style>
 </head>
 <body>
@@ -376,7 +442,9 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
 
 <aside class="side">
   <div class="brand"><span>Prep · 2026-11-07</span>HiTechCloud</div>
-  <nav class="nav" id="nav">
+  <details class="toc-details" id="tocDetails">
+    <summary class="toc-summary">Mục lục · 13 mục</summary>
+    <nav class="nav" id="nav">
     <a href="#basics"><span class="num">00</span>Giải thích từ đầu</a>
     <a href="#overview"><span class="num">01</span>Bản đồ 90 phút</a>
     <a href="#aws"><span class="num">02</span>AWS: S3 · EC2 · Lambda</a>
@@ -390,7 +458,8 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <a href="#mock"><span class="num">09</span>Mock interview</a>
     <a href="#coverage"><span class="num">10</span>Dự đoán đề</a>
     <a href="#ask"><span class="num">11</span>Hỏi lại họ</a>
-  </nav>
+    </nav>
+  </details>
   <div class="progress-wrap">
     <div class="lab"><span>Đã thuộc</span><span id="pcount">0/0</span></div>
     <div class="bar"><i id="pbar"></i></div>
@@ -429,7 +498,8 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
       <li><b>"Lambda khác EC2 ở đâu, khi nào không nên dùng?"</b> → câu này hay được dùng để phân biệt người đã vận hành thật với người mới đọc lý thuyết — nên phải trả lời được kể cả khi mình đang ở nhóm thứ hai.</li>
     </ol>
     <p>Đọc hết trang này mất khoảng 90 phút. Thứ tự dưới đây xếp theo <em>khả năng được hỏi × mức rủi ro của bạn</em>, không theo độ quan trọng tuyệt đối.</p>
-    <table>
+    <div class="tbl-scroll">
+    <table class="wide">
       <thead><tr><th scope="col">Ưu tiên</th><th scope="col">Phần</th><th scope="col">Vì sao đứng ở đây</th></tr></thead>
       <tbody>
         <tr><td>P0 (chắc chắn bị hỏi)</td><td>S3 · EC2 · Lambda</td><td>JD hỏi ba dịch vụ này nặng nhất, nhưng bạn chưa có AWS production: tự dựng S3/EC2/Lambda từng bước trên sandbox, lặp mỗi tuần vì đây là khoảng trống lớn nhất</td></tr>
@@ -440,6 +510,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
         <tr><td>P2 (hiếm)</td><td>Python/FastAPI nâng cao</td><td>Bạn mạnh sẵn — chỉ cần giữ phong độ</td></tr>
       </tbody>
     </table>
+    </div>
 
 
     <div class="card warn">
@@ -457,7 +528,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
 
     <h3>Đường đi một request trên AWS</h3>
     <figure>
-      <div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+      <span class="dg-hint">↔ vuốt ngang để xem sơ đồ</span><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
         <svg viewBox="0 110 960 305" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="aws-path-title aws-path-desc">
           <title id="aws-path-title">Đường đi request trên AWS cho stack của JD</title>
           <desc id="aws-path-desc">Trình duyệt gọi API Gateway; API Gateway định tuyến tới Lambda hoặc ECS Fargate; hai đường compute này đọc ghi RDS PostgreSQL và S3. Lambda được đánh dấu là phần còn thiếu.</desc>
@@ -533,7 +604,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <p>Người phỏng vấn của công ty cloud sẽ không dừng ở "có dùng". Họ hỏi ngay: bucket private hay public, ai ký URL, hạn bao lâu, kiểm quyền ở đâu. Học hình dưới đây là học luôn câu trả lời.</p>
 
     <figure>
-      <div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+      <span class="dg-hint">↔ vuốt ngang để xem sơ đồ</span><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
         <svg viewBox="0 0 960 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="s3-pre-title s3-pre-desc">
           <title id="s3-pre-title">Luồng upload bằng presigned URL</title>
           <desc id="s3-pre-desc">Trình duyệt gửi yêu cầu tới API; API kiểm quyền, tạo presigned URL và trả về; trình duyệt PUT file thẳng lên S3 và nhận 200 kèm ETag.</desc>
@@ -610,7 +681,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <p>Câu "cold start là gì" chỉ trả lời được trọn vẹn nếu bạn vẽ được hình này và nói đúng chỗ nào tốn thời gian.</p>
 
     <figure>
-      <div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+      <span class="dg-hint">↔ vuốt ngang để xem sơ đồ</span><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
         <svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lam-life-title lam-life-desc">
           <title id="lam-life-title">Vòng đời một Lambda sandbox</title>
           <desc id="lam-life-desc">Sandbox khởi tạo, nhận request, trả kết quả rồi đóng băng; request tiếp theo dùng lại sandbox đã ấm; lỗi hoặc timeout đưa hàm sang trạng thái lỗi.</desc>
@@ -704,7 +775,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <p><code>reactive(obj)</code> trả về một <code>Proxy</code>. Proxy handler chặn <code>get</code> và <code>set</code>: khi đọc, <code>track(target, key)</code> ghi effect đang chạy vào dependency map <code>targetMap</code>.</p>
     <p><code>effect(fn)</code> đặt <code>activeEffect</code> trong lúc <code>fn()</code> chạy, nên <code>track</code> biết <em>ai</em> đang đọc — không có nó, Proxy chặn được nhưng không biết chạy lại cái gì. Khi ghi, <code>trigger(target, key)</code> đọc <code>targetMap</code> và chạy lại các effect đã ghi.</p>
     <p><code>ref(x)</code> tồn tại vì Proxy không bọc được primitive (number/string/boolean): nó trả về object có getter/setter <code>.value</code> gọi <code>track</code>/<code>trigger</code>, và template tự unwrap top-level ref nên viết <code>count</code> thay vì <code>count.value</code> hay <code>theme.value</code>. <code>computed</code> là effect có cache và dirty flag, chỉ tính lại khi dependency đổi; <code>watch</code> là effect có scheduler, trì hoãn callback thay vì chạy thẳng trong <code>trigger</code>. Vue 2 dùng <code>Object.defineProperty</code> cho từng key nên không thấy thêm/xóa property, phải cần <code>Vue.set</code>/<code>Vue.delete</code>, mảng phải vá method; Proxy của Vue 3 bỏ các giới hạn đó. Xem sơ đồ trước, phần chi tiết nằm ở ngay dưới đây.</p>
-    <figure><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+    <figure><span class="dg-hint">↔ vuốt ngang để xem sơ đồ</span><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
       <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="vue-core-title vue-core-desc">
         <title id="vue-core-title">Sơ đồ reactivity của Vue 3: render đọc qua Proxy, track ghi dependency, set trigger chạy lại</title>
         <desc id="vue-core-desc">Render effect đọc thuộc tính qua Proxy; get gọi track ghi vào targetMap; set gọi trigger; trigger chạy lại render effect.</desc>
@@ -744,7 +815,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <p>Component là một hàm; UI là hàm của props và state. <code>setState</code> lên lịch render lại: React gọi lại component function và diff cây element trả về với cây trước (reconciliation); DOM chỉ bị chạm ở chỗ diff chỉ ra.</p>
     <p>Fiber là nút (node) đại diện cho một component trong một lần render, giữ state và danh sách hook của nó. Hooks sống trên fiber node dưới dạng linked list (<code>memoizedState</code>), được tiêu thụ theo <b>thứ tự gọi</b> — nên hooks không được gọi có điều kiện và phải giữ cùng thứ tự mỗi render.</p>
     <p><code>useState</code> trả về giá trị của <em>lần render này</em> cộng setter. Setter không sửa (mutate) biến closure của bạn; giá trị mới chỉ tồn tại ở render sau, nên callback cũ vẫn thấy giá trị cũ — đó là nguồn bug "stale closure" trong <code>useEffect</code>/callback. <code>useEffect</code> chạy sau paint; cleanup của nó chạy trước effect kế tiếp hoặc khi unmount.</p>
-    <figure><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+    <figure><span class="dg-hint">↔ vuốt ngang để xem sơ đồ</span><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
       <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="react-core-title react-core-desc">
         <title id="react-core-title">Sơ đồ render của React: state đổi, render lại, diff, commit DOM</title>
         <desc id="react-core-desc">State thay đổi khiến React render lại component, diff cây element, commit phần đổi vào DOM, rồi chạy effect sau paint.</desc>
@@ -781,7 +852,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <p>Video: <a href="https://www.youtube.com/watch?v=1S_V3x5v4zY" target="_blank" rel="noopener">Realigning Your Model of React After Hooks With Dan Abramov — Kent C. Dodds</a></p>
     <h3>FastAPI: ASGI app trên Starlette, Pydantic ở biên, Uvicorn phục vụ</h3>
     <p>FastAPI là framework trên Starlette và Pydantic; nó không phải server — Uvicorn (hoặc ASGI server khác) phục vụ nó. ASGI là interface giữa server và Python app, xây cho async. Handler <code>async def</code> chạy trên event loop; handler <code>def</code> thường chạy trong worker thread để không chặn loop. Pydantic validate request trước khi endpoint chạy và serialize response sau khi chạy; schema OpenAPI sinh từ type hints. <code>Depends()</code> resolve dependency theo từng request và cache dependency trong cùng một request, nên một DB session resolve một lần được mọi route cần nó trong request đó dùng chung. Nhìn sơ đồ dưới đây trước, rồi mới đối chiếu từng lớp với code.</p>
-    <figure><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
+    <figure><span class="dg-hint">↔ vuốt ngang để xem sơ đồ</span><div class="diagram-container" tabindex="0" aria-label="Sơ đồ có thể cuộn ngang">
       <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fastapi-core-title fastapi-core-desc">
         <title id="fastapi-core-title">Sơ đồ request của FastAPI: ASGI app, Pydantic validate, handler event loop hoặc threadpool, Pydantic serialize, response</title>
         <desc id="fastapi-core-desc">Request vào ASGI app; Pydantic validate request trước handler; handler async chạy event loop, handler sync chạy threadpool; Pydantic serialize response rồi trả về.</desc>
@@ -930,7 +1001,8 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     </div>
 
     <h3>Đã kiểm chứng</h3>
-    <table>
+    <div class="tbl-scroll">
+    <table class="decent">
       <tbody>
         <tr><td>Pháp nhân</td><td>Công ty CP Giải pháp Công nghệ và Phần mềm Phổ Tuệ (Pho Tue Software Solutions JSC)</td></tr>
         <tr><td>MST (mã số thuế)</td><td>0318222903 — đang hoạt động, dữ liệu thuế cập nhật 2026-11-06</td></tr>
@@ -939,6 +1011,7 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
         <tr><td>Ngành chính</td><td>6190 (mã ngành đăng ký chính) Viễn thông khác; có thêm 6310 hạ tầng CNTT, 6219 lập trình, 6220 tư vấn CNTT</td></tr>
       </tbody>
     </table>
+    </div>
 
     <h3>Phải thấy bằng văn bản trước khi ký</h3>
     <div id="contract"></div>
@@ -1041,10 +1114,12 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     </div>
 
 
+    <div class="tbl-scroll">
     <table class="cov-table">
       <thead><tr><th>Mức</th><th>Dòng trong JD</th><th>Câu hỏi phủ</th></tr></thead>
       <tbody id="covTable"></tbody>
     </table>
+    </div>
     <p class="cov-note">Chấm điểm ở mục 09 thì các con số ở đây tự đổi màu: <span class="pill good">xanh</span> đã đủ ý,
       <span class="pill weak">đỏ</span> còn yếu, <span class="pill unseen">xám</span> chưa chấm.</p>
 
@@ -1082,10 +1157,12 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     <div class="evlist" id="askEvidence"></div>
 
     <h3 class="sub">Bảng quyết định: họ trả lời gì thì domain là gì</h3>
-    <table class="dec-table">
+    <div class="tbl-scroll">
+    <table class="dec-table wide">
       <thead><tr><th>Câu trả lời của họ</th><th>Kết luận</th><th>Làm gì tiếp</th></tr></thead>
       <tbody id="askDecision"></tbody>
     </table>
+    </div>
 
     <hr class="mk-sep">
 
@@ -1098,10 +1175,13 @@ button:focus-visible,summary:focus-visible,.chip:focus-visible,.dot:focus-visibl
     </details>
 
     <h3 class="sub">Bảng tra nhanh: dấu hiệu phải dừng</h3>
-    <table class="dec-table">
+    <div class="tbl-scroll">
+    <table class="dec-table wide">
       <thead><tr><th>Dấu hiệu</th><th>Họ thường nói</th><th>Bạn làm gì</th></tr></thead>
       <tbody id="askRed"></tbody>
     </table>
+    </div>
+
 
     <div class="card">
       <div class="card-lab">Ba điều nên biết trước khi vào phòng</div>
